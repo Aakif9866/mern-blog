@@ -1,0 +1,30 @@
+vite@latest -> to start (in clients side)
+
+cd client -> npm i to install it all router , react
+
+tailwind docs
+
+auto rename tag 
+
+deploy it to github
+
+now we will create pages and routes  (6 pages intotal )
+for routes -> router dom 
+
+routes successfully established
+
+to update in github we use source control on vs code
+->just click on commit option available there 
+1_ click on +
+2_ then on arrow and commit and push option
+
+to create header we use flowbite package similar to bootstrap
+
+
+header successfully added (also comitted to github )
+
+next from we will work on backend work step by step 
+
+from 53 mins
+* create and run server
+
