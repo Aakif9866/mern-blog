@@ -28,3 +28,19 @@ next from we will work on backend work step by step
 from 53 mins
 * create and run server
 
+
+backend should be in the root file out of client 
+first npminit -y -> change the type to module (only then these packages will work)
+create api folder and then save (index.js) init
+we need to install express for backend
+
+to avoid restarting the server when changes are made we use nodemon to autoupdate server 
+when changes are made
+then change the script to 
+ "dev":"nodemon api/index.js",
+    "start": "node api/index.js"
+
+to use nodemon npm run dev 
+
+# move gitignore from inside of client to root directory
+
