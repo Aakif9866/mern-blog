@@ -44,3 +44,19 @@ to use nodemon npm run dev
 
 # move gitignore from inside of client to root directory
 
+now connect to database
+
+mongo setup done and connected
+
+create an env file to save the important keys init 
+to access key we use process.env.MONGO TO access the key from anywhere
+
+* TO use env npm i"dotenv" ->
+next add these
+import dotenv from "dotenv";
+
+dotenv.config();
+then add .env to gitignore so that it wont be sent 
+
+from 1:13 create a user model for db
+api -> model -> user.model.js 
