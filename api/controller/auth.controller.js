@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import pkg from "bcryptjs";
+import { errorHandler } from "../utils/utils.js";
 const { hashSync } = pkg;
 
 // we mainly use our User model here
@@ -14,7 +15,8 @@ export const signup = async (req, res) => {
     email === "" ||
     password === ""
   ) {
-    return res.status(400).json({ message: "All feilds are required" });
+    next(errorHandler(400, "All feilds are required"));
+    // we created this error handler from utils
   } // extra testing
 
   const hashedpassword = hashSync(password, 10);
@@ -27,7 +29,7 @@ export const signup = async (req, res) => {
     await newUser.save();
     res.json("sign up successful"); // this will show the message
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 // used in auth.signup
