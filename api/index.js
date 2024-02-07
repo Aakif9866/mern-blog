@@ -7,9 +7,14 @@ import userRoutes from "./routes/user.route.js";
 dotenv.config();
 
 // connect db to backend
-mongoose.connect(process.env.MONGO).then(() => {
-  console.log("mongo db is connected");
-});
+mongoose
+  .connect(process.env.MONGO)
+  .then(() => {
+    console.log("mongo db is connected");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 const app = express();
 
