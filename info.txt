@@ -73,3 +73,7 @@ in backend always remember to add js while exporting files
 next add the functions we regularly use into  a folder called controllers
 
 next section signup api route
+* hashing
+* sending data to backend -> also saving it 
+* .use route -> .post in route -> function available in controllers
+* this is using User model we created before
