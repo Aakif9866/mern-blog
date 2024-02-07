@@ -5,7 +5,9 @@ const { hashSync } = pkg;
 
 // we mainly use our User model here
 
-export const signup = async (req, res) => {
+// here add next so that it can be used when needed
+// the fn is added from index.js from .use
+export const signup = async (req, res, next) => {
   const { username, email, password } = req.body; // get this from backend and save it
   if (
     !username ||
