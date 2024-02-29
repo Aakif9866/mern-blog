@@ -77,3 +77,6 @@ next section signup api route
 * sending data to backend -> also saving it 
 * .use route -> .post in route -> function available in controllers
 * this is using User model we created before
+one error handler and middleware created to handle the errors
+
+ctrl + p -> to search for files in vs code

@@ -10,6 +10,7 @@ import Header from "./components/Header";
 function App() {
   return (
     <BrowserRouter>
+      {/* header will be the same after header routes will be there */}
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
