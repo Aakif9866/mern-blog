@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import pkg from "bcryptjs";
-import { errorHandler } from "../utils/utils.js";
+import { errorHandler } from "../utils/error.js";
 const { hashSync } = pkg;
 
 // we mainly use our User model here

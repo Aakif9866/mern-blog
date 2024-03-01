@@ -80,3 +80,9 @@ next section signup api route
 one error handler and middleware created to handle the errors
 
 ctrl + p -> to search for files in vs code
+
+
+sign up page functionality :
+adding a proxy in vite side 
+connecting backend and frontend
+knowing how controllers Routes and index.js (in API ) work togther
