@@ -16,6 +16,7 @@ import {
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector((state) => state.user);
+  // 👆 we get these two from the state directly using useselector
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -31,7 +32,7 @@ export default function SignIn() {
       // use below line to set these attributes using redux reducer
       // YOU CAN CHECK THE PROPERTIES OR CHANGES IN userSlice.js
       // coz thats where we define our function
-      dispatch(signInStart());
+      dispatch(signInStart()); // here only state
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -39,11 +40,12 @@ export default function SignIn() {
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(signInFailure(data.message));
+        dispatch(signInFailure(data.message)); // here  state with action ie error
       }
 
       if (res.ok) {
-        dispatch(signInSuccess(data));
+        dispatch(signInSuccess(data)); // here  state with action ie error and we sent the
+        // data which is changed in state with the help of redux
         navigate("/");
       }
     } catch (error) {
