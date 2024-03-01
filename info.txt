@@ -86,3 +86,7 @@ sign up page functionality :
 adding a proxy in vite side 
 connecting backend and frontend
 knowing how controllers Routes and index.js (in API ) work togther
+
+source control isnt working so need to commit from terminal 
+
+next signin page
