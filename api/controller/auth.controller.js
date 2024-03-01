@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import pkg from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { errorHandler } from "../utils/error.js";
-
+import bcryptjs from "bcryptjs";
 const { hashSync } = pkg;
 const { compareSync } = pkg;
 
@@ -53,7 +53,7 @@ export const signin = async (req, res, next) => {
     if (!validUser) {
       return next(errorHandler(404, "User not found"));
     }
-    const validPassword = compareSync(password, validUser.password);
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
       return next(errorHandler(400, "Invalid password"));
     }
