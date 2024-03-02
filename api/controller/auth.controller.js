@@ -11,6 +11,8 @@ const { hashSync } = pkg;
 // here add next so that it can be used when needed
 // the fn is added from index.js from .use
 
+// used in auth.route.js 👇 for signup
+
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body; // get this from backend and save it
   if (
@@ -38,7 +40,6 @@ export const signup = async (req, res, next) => {
     next(error);
   }
 };
-// used in auth.route.js 👆 for signup
 
 // used in auth.route.js 👇 for signin
 
@@ -81,3 +82,57 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+// used in auth.route.js 👇 for google  (ie authentication)
+
+export const google = async (req, res, next) => {
+  const { email, name, googlePhotoUrl } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET
+      );
+      const { password, ...rest } = user._doc;
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json(rest);
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      const newUser = new User({
+        username:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
+        email,
+        password: hashedPassword,
+        profilePicture: googlePhotoUrl,
+      });
+      await newUser.save();
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.JWT_SECRET
+      );
+      const { password, ...rest } = newUser._doc;
+      //It takes the newUser._doc object, which contains all the data of the newly created user document.
+      // It extracts the password property from that object and assigns it to a variable named password.
+      // The rest of the properties are gathered into a new object using the rest syntax (...rest). This object contains all properties of newUser._doc except for password.
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// what all things sign in function performs
