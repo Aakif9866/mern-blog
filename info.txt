@@ -89,4 +89,28 @@ knowing how controllers Routes and index.js (in API ) work togther
 
 source control isnt working so need to commit from terminal 
 
-next signin page
+next signin page api route
+
+next sign in page functionality 
+
+all working great 
+** reason of invalid password is that the first password had no hashing but now we have password hashing 
+and we check hashing using compareSync function 
+
+
+
+after firebase setup we use 
+import.meta.env.VITE_FIREBASE_API_KEY, to access the key from env 
+
+
+
+const token = jwt.sign(
+  { id: newUser._id, isAdmin: newUser.isAdmin }, // Payload: Data to be included in the token
+  process.env.JWT_SECRET // Secret key used to sign the token
+);
+
+
+for webtoken 
+Payload: The first parameter passed to jwt.sign() is the payload, which is a JSON object containing the information you want to transmit securely. In this case, it includes the user's ID (newUser._id) and whether the user is an admin (newUser.isAdmin). This payload will be encoded into the token.
+
+Secret Key: The second parameter (process.env.JWT_SECRET) is the secret key used to sign the token. This key is known only to the server, and it is used to generate and verify the token's signature. It's important to keep this secret key secure, as anyone who has access to it can create and tamper with tokens.
