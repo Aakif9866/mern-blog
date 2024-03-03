@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userReducer from "./user/userSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import themeReducer from "./theme/themeSlice"; // for theme
 
 // as this is the same with which we wrapped our App ie provider our redux actually works
 // here we use userReducer we get from userSlice.js
@@ -10,6 +11,7 @@ import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   user: userReducer,
+  theme: themeReducer,
 });
 
 const persistConfig = {

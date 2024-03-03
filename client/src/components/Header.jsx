@@ -3,8 +3,9 @@ import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { TextInput, Button } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
 
 function Header() {
   const path = useLocation().pathname; // to get the current location from the url
@@ -12,6 +13,8 @@ function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user); // we need this inorder to display some of the attributes in
   // The navbar
+
+  const { theme } = useSelector((state) => state.theme); // to find the icon
 
   const handleSignout = () => {};
 
@@ -45,8 +48,11 @@ function Header() {
           className="w-12 h-10 hidden sm:inline "
           color="gray"
           pill="true"
+          onClick={() => {
+            dispatch(toggleTheme());
+          }}
         >
-          <FaMoon />
+          {theme === "light" ? <FaSun /> : <FaMoon />}
         </Button>
         {currentUser ? (
           <Dropdown
@@ -99,3 +105,24 @@ export default Header;
 // <!-- This will only center text on screens 640px and wider, not on small screens --><div class="sm:text-center"></div>
 
 // 2nd searchicon is hidden on large screen
+
+//  eventhandlers in js
+
+// In JavaScript, especially in React, there are different ways to handle event handlers like onClick. The two examples you provided demonstrate two different approaches:
+
+// Using Arrow Function Inline:
+// jsx
+// Copy code
+// onClick={() => {
+//     dispatch(toggleTheme());
+// }}
+
+// In this approach, an inline arrow function is defined within the onClick attribute. This inline function then dispatches an action toggleTheme() when the click event occurs. This approach is useful when you need to pass parameters or execute multiple statements.
+
+// Using a Function Reference:
+// jsx
+// Copy code
+// onClick={handleSignout}
+// Here, handleSignout refers to a function that's defined elsewhere in your component or imported from another module. When the click event occurs, this function will be invoked. This approach is commonly used for cleaner and more readable code, especially when the event handler function is reusable or complex.
+
+// Both approaches are valid and have their use cases. The first one allows for inline logic and easy access to component state and props within the function, while the second one promotes cleaner and more modular code by separating the event handler logic from the JSX.

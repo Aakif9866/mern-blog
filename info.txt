@@ -114,3 +114,5 @@ for webtoken
 Payload: The first parameter passed to jwt.sign() is the payload, which is a JSON object containing the information you want to transmit securely. In this case, it includes the user's ID (newUser._id) and whether the user is an admin (newUser.isAdmin). This payload will be encoded into the token.
 
 Secret Key: The second parameter (process.env.JWT_SECRET) is the secret key used to sign the token. This key is known only to the server, and it is used to generate and verify the token's signature. It's important to keep this secret key secure, as anyone who has access to it can create and tamper with tokens.
+
+now add dark mode to blog
