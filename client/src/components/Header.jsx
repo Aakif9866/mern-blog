@@ -13,7 +13,7 @@ function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user); // we need this inorder to display some of the attributes in
   // The navbar
-
+  console.log(currentUser);
   const { theme } = useSelector((state) => state.theme); // to find the icon
 
   const handleSignout = () => {};

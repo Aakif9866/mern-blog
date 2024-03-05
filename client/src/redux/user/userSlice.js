@@ -20,6 +20,11 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    // due to this reducer the state is updated
+    // This is used in signIn funtion to update the the state and then
+    // when the value is set it is used from the redux state
+    // and then through the provider this is accessible using redux state
+
     signInSuccess: (state, action) => {
       state.currentUser = action.payload;
       state.loading = false;

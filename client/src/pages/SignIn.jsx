@@ -32,7 +32,8 @@ export default function SignIn() {
       // use below line to set these attributes using redux reducer
       // YOU CAN CHECK THE PROPERTIES OR CHANGES IN userSlice.js
       // coz thats where we define our function
-      dispatch(signInStart()); // here only state
+
+      dispatch(signInStart()); // here only state but no action
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,8 +45,8 @@ export default function SignIn() {
       }
 
       if (res.ok) {
-        dispatch(signInSuccess(data)); // here  state with action ie error and we sent the
-        // data which is changed in state with the help of redux
+        dispatch(signInSuccess(data)); // here  state with action  and we sent the
+        // data which is to be  changed in state with the help of redux
         navigate("/");
       }
     } catch (error) {
