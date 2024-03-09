@@ -1,11 +1,11 @@
 import express from "express";
-import { test } from "../controller/user.controller.js"; // .js very very important
+import { deleteUser, test } from "../controller/user.controller.js"; // .js very very important
 import { updateUser } from "../controller/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
 const router = express.Router();
 
 router.get("/test", test);
-router.put("/update/:userId", verifyToken, updateUser);
-
+router.put("/update/:userId", verifyToken, updateUser); // update data
+router.delete("/delete/:userId", verifyToken, deleteUser);
 export default router;
