@@ -130,3 +130,5 @@ now add dark mode to blog
       state.loading = false;
       state.error = null;
     },
+
+create a confirm popup and if selected delete the account in a confirm manner 
