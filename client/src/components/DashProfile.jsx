@@ -23,7 +23,7 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
 export default function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user); // this works because the app is wrapped with the provider and is related to store
+  const { currentUser, error, loading } = useSelector((state) => state.user); // this works because the app is wrapped with the provider and is related to store
 
   const [ImageFile, setImageFile] = useState(null); // to get the file
 
@@ -250,9 +250,25 @@ export default function DashProfile() {
           placeholder="password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          outline
+          disabled={loading || imageFileUploading}
+        >
+          {loading ? "Loading..." : "Update"}
         </Button>
+        {currentUser.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              type="button"
+              gradientDuoTone="purpleToPink"
+              className="w-full"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="text-red-500 mt-5 flex justify-between">
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
@@ -273,11 +289,11 @@ export default function DashProfile() {
           {updateUserError}
         </Alert>
       )}
-      {error && (
+      {/* {error && (
         <Alert color="failure" className="mt-5">
           {error}
         </Alert>
-      )}
+      )} */}
 
       <Modal
         show={showModal}
