@@ -12,3 +12,5 @@ router.post("/signout", signout); // anybody can signout So no need of verifyTok
 export default router;
 
 // Express is a web application framework for Node.js, and Express Router is a part of it. Express Router is used to create modular, mountable route handlers. It allows you to define routes in separate files and then use them in your main application.
+
+// This line defines a route that listens for HTTP PUT requests on the path /update/:userId. :userId is a parameter in the route path, which can be accessed inside the updateUser function. verifyToken is a middleware function that runs before the updateUser function. Middleware functions in Express have access to the request and response objects and can execute code, modify request, or short-circuit the request-response cycle. updateUser is the controller function responsible for handling the PUT request.

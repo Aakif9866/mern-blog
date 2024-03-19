@@ -61,7 +61,7 @@ export const deleteUser = async (req, res, next) => {
     return next(errorHandler(403, "You are not allowed to delete this user"));
   }
   try {
-    await User.findByIdAndDelete(req.params.userId);
+    await User.findByIdAndDelete(req.params.userId); // a part of user object is the function used
     res.status(200).json("User has been deleted");
   } catch (error) {
     next(error);

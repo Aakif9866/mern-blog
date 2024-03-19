@@ -1,4 +1,4 @@
-// we use this file to check the jwt token to authentucate the user
+// we use this file to check the jwt token to authenticate the user
 import jwt from "jsonwebtoken";
 import { errorHandler } from "./error.js";
 

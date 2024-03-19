@@ -162,6 +162,9 @@ export default function DashProfile() {
     }
   };
 
+  // this funcitons uses redux for state management
+  // coz there are multiple signout and all have the same function
+  //
   const handleSignout = async () => {
     try {
       const res = await fetch("/api/user/signout", {

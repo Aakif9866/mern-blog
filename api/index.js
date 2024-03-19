@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
+import postRoutes from "./routes/post.route.js";
 
 dotenv.config();
 
@@ -29,8 +30,10 @@ app.listen(3000, () => {
 });
 
 // app.get("/api/user", userRoutes); -> wrong use "use" here
-app.use("/api/user", userRoutes);
-app.use("/api/auth", authRoutes);
+
+app.use("/api/user", userRoutes); // user path
+app.use("/api/auth", authRoutes); // auth path
+app.use("/api/post", postRoutes); // post path
 
 // check below how this middleware works
 app.use((err, req, res, next) => {
