@@ -28,18 +28,25 @@ export const create = async (req, res, next) => {
   }
 };
 
+/* very important note : in mongo id is represented by _id but on frontend by userId */
+
+// this is one of the most important function as it is used in dashboard
+//   searchbar home page and many other pages
+
 export const getposts = async (req, res, next) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
-    const sortDirection = req.query.order === "asc" ? 1 : -1;
+    const limit = parseInt(req.query.limit) || 9; // no of items to load at a time -> 9 looks sufficient enough
+    const sortDirection = req.query.order === "asc" ? 1 : -1; // sorts in requried
     const posts = await Post.find({
+      // these are all the external queries
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
         $or: [
+          // this is internal query searches inside the content and title
           { title: { $regex: req.query.searchTerm, $options: "i" } },
           { content: { $regex: req.query.searchTerm, $options: "i" } },
         ],

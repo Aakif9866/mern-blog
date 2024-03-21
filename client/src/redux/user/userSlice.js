@@ -7,7 +7,8 @@ import { createSlice } from "@reduxjs/toolkit";
 // reducers: { ... }: This is an object containing reducer functions. Each key-value pair represents a specific action type and the corresponding reducer function to handle that action.
 
 const initialState = {
-  currentUser: null,
+  currentUser: null, // this is set to proper user details during signin time
+  //  and after that we use {useSelect} hook to get  this everytime we need to use this to seperate user and admin The same is also used in dashboard
   error: null,
   loading: false,
 };
