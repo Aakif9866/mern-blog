@@ -3,6 +3,7 @@ import DashSidebar from "../components/DashSidebar";
 import DashProfile from "../components/DashProfile";
 import { useLocation } from "react-router-dom"; // to find the tab location
 import { useState } from "react";
+import DashPost from "../components/DashPost";
 
 // useState to set tab , uselocation to get the location
 // useEffect to search for the tab and to set it
@@ -14,7 +15,7 @@ import { useState } from "react";
 function Dashboard() {
   const location = useLocation();
 
-  const [Tab, setTab] = useState(""); // to get tab location
+  const [tab, setTab] = useState(""); // to get tab location
 
   useEffect(() => {
     const urlparams = new URLSearchParams(location.search); // put the url here
@@ -31,7 +32,9 @@ function Dashboard() {
         <DashSidebar />
       </div>
       {/* profile => will be shown only on profile tab */}
-      {Tab === "profile" && <DashProfile />}
+      {tab === "profile" && <DashProfile />}
+      {/* posts */}
+      {tab === "posts" && <DashPost />}
     </div>
   );
 }
