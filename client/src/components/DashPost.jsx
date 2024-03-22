@@ -36,12 +36,13 @@ export default function DashPost() {
     const startIndex = userPosts.length;
     try {
       const res = await fetch(
-        `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+        `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}` // does backend
         // here we give start index parameter according to which next results are fetched
         // and these results are added to the posts section IE
       );
       const data = await res.json();
       if (res.ok) {
+        // updaate frontend
         setUserPosts((prev) => [...prev, ...data.posts]);
         if (data.posts.length < 9) {
           setShowMore(false);

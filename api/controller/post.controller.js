@@ -71,7 +71,7 @@ export const getposts = async (req, res, next) => {
     });
 
     res.status(200).json({
-      posts,
+      posts, /// here we sent the posts the same is what we receive when fetch in updateposts \\\
       totalPosts,
       lastMonthPosts,
     });
@@ -83,6 +83,10 @@ export const getposts = async (req, res, next) => {
 // this can be deleted by either admin or the creator of this post
 export const deletepost = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+    // req.user.id: This likely represents the ID of the authenticated user who is making the request. It is often set after the user has logged in or has been authenticated in some way.
+
+    // req.params.userId: This is likely a parameter extracted from the URL of the request. It represents the ID of the user to whom the operation (in this case, deleting a post) is being applied.
+
     return next(errorHandler(403, "You are not allowed to delete this post"));
   }
   try {
@@ -115,3 +119,7 @@ export const updatepost = async (req, res, next) => {
     next(error);
   }
 };
+
+// Passing the Error: When next(error) is called, Express will skip any remaining middleware functions in the current middleware stack and move to the next middleware function specifically designed to handle errors.
+
+// Handling the Error Response: If you haven't explicitly defined an error handling middleware, Express will use its default error handling mechanism. It typically sends an error response to the client with an appropriate status code and error message.
