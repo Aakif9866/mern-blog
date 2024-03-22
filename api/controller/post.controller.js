@@ -80,6 +80,7 @@ export const getposts = async (req, res, next) => {
   }
 };
 
+// this can be deleted by either admin or the creator of this post
 export const deletepost = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to delete this post"));
