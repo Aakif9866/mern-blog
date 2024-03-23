@@ -47,6 +47,7 @@ export default function DashUsers() {
   };
 
   const handleDeleteUser = async () => {
+    // already created this route in dashboard page
     try {
       const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
         method: "DELETE",
