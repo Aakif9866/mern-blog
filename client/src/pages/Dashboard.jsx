@@ -4,6 +4,7 @@ import DashProfile from "../components/DashProfile";
 import { useLocation } from "react-router-dom"; // to find the tab location
 import { useState } from "react";
 import DashPost from "../components/DashPost";
+import DashUsers from "../components/DashUsers";
 
 // useState to set tab , uselocation to get the location
 // useEffect to search for the tab and to set it
@@ -35,6 +36,8 @@ function Dashboard() {
       {tab === "profile" && <DashProfile />}
       {/* posts */}
       {tab === "posts" && <DashPost />}
+      {/* users */}
+      {tab === "users" && <DashUsers />}
     </div>
   );
 }
