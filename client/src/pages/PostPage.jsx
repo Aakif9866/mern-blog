@@ -1,7 +1,7 @@
 import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-// import CallToAction from "../components/CallToAction";
+import CallToAction from "../components/CallToAction";
 // import CommentSection from "../components/CommentSection";
 // import PostCard from "../components/PostCard";
 
@@ -86,7 +86,9 @@ export default function PostPage() {
         className="p-3 max-w-2xl mx-auto w-full post-content"
         dangerouslySetInnerHTML={{ __html: post && post.content }} // we use this to because the content of file is in html format only
       ></div>
-      <div className="max-w-4xl mx-auto w-full">{/* <CallToAction /> */}</div>
+      <div className="max-w-4xl mx-auto w-full">
+        <CallToAction />
+      </div>
       {/* <CommentSection postId={post._id} /> */}
 
       <div className="flex flex-col justify-center items-center mb-5">

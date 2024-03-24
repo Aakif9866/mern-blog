@@ -38,6 +38,8 @@ function Dashboard() {
       {tab === "posts" && <DashPost />}
       {/* users */}
       {tab === "users" && <DashUsers />}
+      {/* comments  */}
+      {tab === "comments" && <DashComments />}
     </div>
   );
 }
