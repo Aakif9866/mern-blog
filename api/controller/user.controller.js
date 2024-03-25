@@ -58,6 +58,9 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   if (!req.user.isAdmin && req.user.id !== req.params.userId) {
+    // req.user.id !== req.params.userId the reason behind adding this condition is
+    // if a particluar user changes the param to delete another user -> to avoid such cases we add the above check
+
     return next(errorHandler(403, "You are not allowed to delete this user"));
   }
   try {
@@ -133,3 +136,9 @@ export const getUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// req.user.id refers to the ID of the user who is currently authenticated and making the request. This information is typically stored in the request object (req) by middleware such as authentication middleware.
+
+// req.params.userId refers to the user ID specified in the parameters of the HTTP request. For example, if this function is handling a PUT or PATCH request to update user information, the user ID being updated would typically be included in the URL as a parameter.
+
+// The function compares these two user IDs to ensure that the user making the request (req.user.id) is the same as the user whose information is being updated (req.params.userId). This is a security measure to prevent unauthorized users from modifying the information of other users.

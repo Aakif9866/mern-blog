@@ -47,6 +47,10 @@ export default function SignIn() {
       if (res.ok) {
         dispatch(signInSuccess(data)); // here  state with action  and we sent the
         // data which is to be  changed in state with the help of redux
+
+        // here is where the user details are saved for the further verification while deleting the user and similar tasks this defines the lhs of req.user.id !== req.params.userId
+
+        //
         navigate("/");
       }
     } catch (error) {
