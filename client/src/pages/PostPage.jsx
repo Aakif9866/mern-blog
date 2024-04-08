@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
-// import PostCard from "../components/PostCard";
+import PostCard from "../components/PostCard";
 
 // it mainly represents the postpage
 
@@ -15,6 +15,7 @@ export default function PostPage() {
   const [recentPosts, setRecentPosts] = useState(null);
 
   //   most important part of this code is controller -> used for queiry and sending particular information
+  // slug is created in controller itself
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -39,6 +40,7 @@ export default function PostPage() {
     fetchPost();
   }, [postSlug]);
 
+  // this is for recent posts (bottom 3 )
   useEffect(() => {
     try {
       const fetchRecentPosts = async () => {
@@ -91,13 +93,14 @@ export default function PostPage() {
       <div className="max-w-4xl mx-auto w-full">
         <CallToAction />
       </div>
+
       <CommentSection postId={post._id} />
 
       <div className="flex flex-col justify-center items-center mb-5">
         <h1 className="text-xl mt-5">Recent articles</h1>
         <div className="flex flex-wrap gap-5 mt-5 justify-center">
-          {/* {recentPosts &&
-            recentPosts.map((post) => <PostCard key={post._id} post={post} />)} */}
+          {recentPosts &&
+            recentPosts.map((post) => <PostCard key={post._id} post={post} />)}
         </div>
       </div>
     </main>
