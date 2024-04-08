@@ -35,6 +35,12 @@ export const getPostComments = async (req, res, next) => {
   }
 };
 
+// 👇 how does likes dwork
+// for every comment there is an array when like clicked add this to index to array
+// and when unliked this is removed from the array
+// also increse the no of likes by 1
+// in other case remove 1
+
 export const likeComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.commentId);
