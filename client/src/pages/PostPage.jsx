@@ -5,8 +5,10 @@ import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
 // import PostCard from "../components/PostCard";
 
+// it mainly represents the postpage
+
 export default function PostPage() {
-  const { postSlug } = useParams(); // get this using user hook
+  const { postSlug } = useParams(); // get this using usehook
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [post, setPost] = useState(null);

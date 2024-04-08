@@ -30,7 +30,7 @@ export const create = async (req, res, next) => {
 
 /* very important note : in mongo id is represented by _id but on frontend by userId */
 
-// this is one of the most important function as it is used in dashboard
+// this (below) is one of the most important function as it is used in dashboard
 //   searchbar home page and many other pages
 
 export const getposts = async (req, res, next) => {

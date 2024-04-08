@@ -59,6 +59,9 @@ export default function CreatePost() {
     }
   };
 
+  // both are handle submit functions
+  // one has error and other doesnt
+
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
@@ -100,6 +103,7 @@ export default function CreatePost() {
         },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
       if (!res.ok) {
         setPublishError(data.message);
