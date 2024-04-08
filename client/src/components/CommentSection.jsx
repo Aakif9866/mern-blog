@@ -95,6 +95,7 @@ export default function CommentSection({ postId }) {
   };
 
   const handleDelete = async (commentId) => {
+    // this function is used inside the modal after conforming the deleting of that specific route
     setShowModal(false);
     try {
       if (!currentUser) {
