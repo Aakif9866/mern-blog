@@ -137,3 +137,6 @@ create a confirm popup and if selected delete the account in a confirm manner
 admin functionality (ie basically the cookie ) is already added while setting up most of the controllers
 {signup,signin,google auth} -> these controllers 
 so no need to add any new file just this note
+
+
+comments section is used in postpage

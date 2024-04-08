@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom"; // to find the tab location
 import { useState } from "react";
 import DashPost from "../components/DashPost";
 import DashUsers from "../components/DashUsers";
+import DashComments from "../components/DashComments";
 
 // useState to set tab , uselocation to get the location
 // useEffect to search for the tab and to set it
