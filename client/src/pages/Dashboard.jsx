@@ -6,6 +6,7 @@ import { useState } from "react";
 import DashPost from "../components/DashPost";
 import DashUsers from "../components/DashUsers";
 import DashComments from "../components/DashComments";
+import DashboardComp from "../components/DashboardComp";
 
 // useState to set tab , uselocation to get the location
 // useEffect to search for the tab and to set it
@@ -41,6 +42,8 @@ function Dashboard() {
       {tab === "users" && <DashUsers />}
       {/* comments  */}
       {tab === "comments" && <DashComments />}
+      {/* dashboardComp */}
+      {tab === "dash" && <DashboardComp />}
     </div>
   );
 }
