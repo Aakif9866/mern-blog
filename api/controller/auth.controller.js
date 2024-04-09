@@ -1,3 +1,4 @@
+// all steps done just commit now
 import User from "../models/user.model.js";
 import pkg from "bcryptjs";
 import jwt from "jsonwebtoken";
