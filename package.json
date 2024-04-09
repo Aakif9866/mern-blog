@@ -9,6 +9,7 @@
     "start": "node api/index.js",
     "build":"npm install && npm install --prefix && npm run build --prefix client"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
