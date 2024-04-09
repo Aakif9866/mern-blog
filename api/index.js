@@ -9,6 +9,8 @@ import commentRoutes from "./routes/comment.route.js";
 import cookieParser from "cookie-parser";
 import postRoutes from "./routes/post.route.js";
 
+import path from "path";
+
 dotenv.config();
 
 // connect db to backend
@@ -23,6 +25,8 @@ mongoose
 
 const app = express();
 
+const __dirname = path.resolve();
+
 app.use(express.json());
 app.use(cookieParser()); // used to extrack cookie from browser
 
@@ -36,6 +40,13 @@ app.use("/api/user", userRoutes); // user path
 app.use("/api/auth", authRoutes); // auth path
 app.use("/api/post", postRoutes); // post path
 app.use("/api/comment", commentRoutes); // comment path
+
+// these are solely for deployment
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 // check below how this middleware works
 app.use((err, req, res, next) => {
