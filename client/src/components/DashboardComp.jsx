@@ -27,7 +27,8 @@ export default function DashboardComp() {
         const data = await res.json();
         if (res.ok) {
           setUsers(data.users);
-          setTotalUsers(data.totalUsers);
+          setTotalUsers(data.totalUsers); // we get this from db with the help of controller
+
           setLastMonthUsers(data.lastMonthUsers);
         }
       } catch (error) {
