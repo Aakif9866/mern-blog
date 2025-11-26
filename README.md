@@ -154,3 +154,30 @@ Deployment (Render)
 
 # screenshots 
 
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.09.47%20AM.png?raw=true)
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.04%20AM.png?raw=true)
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.17%20AM.png?raw=true)
+
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.28%20AM.png?raw=true)
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.43%20AM.png?raw=true)
+
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.11.41%20AM.png?raw=true)
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.13.41%20AM.png?raw=true)
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.13.52%20AM.png?raw=true)
+
+
+![](https://github.com/Aakif9866/mern-blog/blob/main/mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.14.33%20AM.png?raw=true)
