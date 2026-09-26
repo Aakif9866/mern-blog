@@ -6,6 +6,13 @@ A full-stack blogging platform built with **MongoDB, Express, React and Node.js*
 
 > Originally built in 2024 during my 2nd year of college as my first end-to-end MERN project. The `v2` branch is where it gets revisited and improved.
 
+| Milestone | Date |
+|---|---|
+| Project started (first commit, repo created) | 4 Feb 2024 |
+| Feature-complete and first deployed to Render | 10 Apr 2024 |
+| Screenshots and first README added | 27 Nov 2025 |
+| v2 revisit begins | 27 Sep 2026 |
+
 ---
 
 ## Table of Contents
