@@ -25,3 +25,7 @@ dist-ssr
 .env
 
 # // all steps done just commit now
+# Environment files (secrets)
+*.env
+.env.*
+!.env.example
