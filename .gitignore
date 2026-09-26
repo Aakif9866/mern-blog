@@ -24,8 +24,13 @@ dist-ssr
 *.sw?
 .env
 
-# // all steps done just commit now
 # Environment files (secrets)
 *.env
 .env.*
 !.env.example
+
+# Build / test artifacts
+coverage
+server/uploads/*
+!server/uploads/.gitkeep
+*.tsbuildinfo
