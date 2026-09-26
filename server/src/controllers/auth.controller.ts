@@ -48,6 +48,25 @@ export async function logoutAll(req: Request, res: Response) {
   res.json({ ok: true });
 }
 
+/**
+ * Session probe for app start-up. Always 200: the signed-in user, a user
+ * restored from the refresh cookie (rotating it), or null for guests.
+ */
+export async function session(req: Request, res: Response) {
+  if (req.user) return res.json({ user: auth.serializeMe(req.user) });
+  const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
+  if (token) {
+    try {
+      const result = await auth.refresh(token, clientMeta(req));
+      setAuthCookies(res, result.accessToken, result.refreshToken);
+      return res.json({ user: auth.serializeMe(result.user) });
+    } catch {
+      clearAuthCookies(res);
+    }
+  }
+  res.json({ user: null });
+}
+
 export function me(req: Request, res: Response) {
   res.json({ user: auth.serializeMe(req.user!) });
 }

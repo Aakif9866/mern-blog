@@ -56,7 +56,7 @@ export function NotificationBell({ className }: { className?: string }) {
   const { data } = useUnreadCount(Boolean(me));
   const count = data?.count ?? 0;
   return (
-    <NavLink to="/notifications" className={clsx("relative rounded-lg p-2.5 text-ink-soft hover:bg-muted hover:text-ink", className)} aria-label={count ? `Notifications, ${count} unread` : "Notifications"}>
+    <NavLink to="/notifications" className={clsx("relative flex rounded-lg p-2.5 text-ink-soft hover:bg-muted hover:text-ink", className)} aria-label={count ? `Notifications, ${count} unread` : "Notifications"}>
       <Bell className="h-5 w-5" />
       {count > 0 && (
         <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">{count > 99 ? "99+" : count}</span>
@@ -147,19 +147,25 @@ export function Navbar() {
             <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
           ) : me ? (
             <>
-              <ButtonLink to="/write" size="sm" className="hidden sm:inline-flex">
-                <PenSquare className="h-4 w-4" />
-                Write
-              </ButtonLink>
-              <NotificationBell className="hidden sm:inline-flex" />
+              <span className="hidden sm:block">
+                <ButtonLink to="/write" size="sm">
+                  <PenSquare className="h-4 w-4" />
+                  Write
+                </ButtonLink>
+              </span>
+              <span className="hidden sm:block">
+                <NotificationBell />
+              </span>
               <UserMenu />
             </>
           ) : (
             <>
               <ThemeToggle />
-              <ButtonLink to="/sign-in" variant="ghost" size="sm" className="hidden sm:inline-flex">
-                Sign in
-              </ButtonLink>
+              <span className="hidden sm:block">
+                <ButtonLink to="/sign-in" variant="ghost" size="sm">
+                  Sign in
+                </ButtonLink>
+              </span>
               <ButtonLink to="/sign-up" size="sm">
                 Join Klyro
               </ButtonLink>

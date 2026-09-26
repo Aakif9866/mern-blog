@@ -16,11 +16,40 @@ import { displayName } from "@/lib/format";
 
 type FeedType = "following" | "latest" | "trending";
 
+/** Real recent posts, shown as a stacked preview beside the hero on wide screens. */
+function HeroPreview() {
+  const q = useCursorList<PostCardType>(keys.feed("latest"), "/posts", { type: "latest", limit: 3 });
+  const posts = flatten(q.data).slice(0, 3);
+  if (posts.length < 2) return null;
+  return (
+    <div className="relative hidden min-h-[22rem] lg:row-span-2 lg:block" aria-hidden="true">
+      {posts.map((p, i) => (
+        <div
+          key={p._id}
+          className="absolute w-[24rem] rounded-2xl border border-line bg-surface p-5 shadow-xl"
+          style={{ top: `${i * 7.5}rem`, left: `${i % 2 ? 3.5 : 0}rem`, transform: `rotate(${[-2, 1.5, -1][i]}deg)` }}
+        >
+          <div className="flex items-center gap-2 text-sm">
+            <Avatar user={p.author} size="xs" />
+            <span className="font-medium">{displayName(p.author)}</span>
+          </div>
+          <div className="mt-2 line-clamp-2 font-bold leading-snug">{p.title}</div>
+          <div className="mt-3 flex gap-1.5">
+            {p.tags.slice(0, 3).map((t) => (
+              <span key={t} className="rounded-full bg-muted px-2 py-0.5 text-xs text-ink-soft">#{t}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-line bg-surface">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60rem_30rem_at_70%_-10%,rgba(99,102,241,0.18),transparent)]" aria-hidden="true" />
-      <div className="relative mx-auto max-w-7xl px-4 py-14 sm:py-20">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_28rem]">
         <div className="max-w-2xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-soft">
             <LogoMark className="h-4 w-4" /> Klyro community
@@ -40,7 +69,8 @@ function Hero() {
             </ButtonLink>
           </div>
         </div>
-        <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+        <HeroPreview />
+        <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3 lg:col-start-1">
           {[
             { icon: PenSquare, title: "A writer-first editor", text: "Markdown shortcuts, code highlighting, drafts that save themselves." },
             { icon: Users, title: "Your people, your topics", text: "Follow writers and tags to shape a feed worth reading." },

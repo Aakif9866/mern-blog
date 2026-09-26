@@ -1,427 +1,319 @@
-# MERN Blog
+<p align="center">
+  <img src="client/public/favicon.svg" width="72" height="72" alt="Klyro logo" />
+</p>
 
-A full-stack blogging platform built with **MongoDB, Express, React and Node.js**. Admins write and publish posts with a rich-text editor and cover images. Readers sign up (with email or Google), search and filter posts, and discuss them in threaded comments with likes. An admin dashboard shows users, posts, comments and monthly growth at a glance.
+<h1 align="center">Klyro</h1>
+<p align="center"><strong>Where ideas come together.</strong></p>
+<p align="center">A community blogging platform for developers and curious minds, built on MongoDB, Express, React and Node.js in TypeScript.</p>
 
-**Live demo:** https://mern-blog-final.onrender.com (Render free tier: the first load can take ~30s while the server wakes up)
+![Klyro home page](docs/screenshots/home-desktop.png)
 
-> Originally built in 2024 during my 2nd year of college as my first end-to-end MERN project. The `v2` branch is where it gets revisited and improved.
+Klyro started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild into a production-quality community platform: anyone can write, readers follow people and topics, discussions are threaded, a moderation team keeps things healthy, and it works just as well on a phone as on a desktop.
 
 ---
 
-## Table of Contents
+## Contents
 
 - [Features](#features)
 - [Screenshots](#screenshots)
-- [Tech Stack](#tech-stack)
+- [Tech stack](#tech-stack)
 - [Architecture](#architecture)
-- [Project Structure](#project-structure)
-- [Data Models](#data-models)
-- [Authentication & Authorization](#authentication--authorization)
-- [API Reference](#api-reference)
-- [Frontend Routes](#frontend-routes)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
+- [Getting started](#getting-started)
+- [Configuration](#configuration)
 - [Scripts](#scripts)
+- [Testing and quality](#testing-and-quality)
+- [API](#api)
+- [Security](#security)
 - [Deployment](#deployment)
-- [Known Limitations / v2 Roadmap](#known-limitations--v2-roadmap)
+- [Upgrading from v1](#upgrading-from-v1)
+- [Project structure](#project-structure)
+- [Project timeline](#project-timeline)
+- [Roadmap](#roadmap)
 
 ---
 
 ## Features
 
-**For readers**
-- Sign up / sign in with email and password, or one click with **Google (Firebase OAuth)**
-- Browse recent posts on the home page, open a post by its readable slug (`/post/my-first-post`)
-- **Search** posts by keyword (matches title and content), filter by category, and sort newest/oldest
-- **Comment** on posts, **like** comments, and edit or delete your own comments
-- Profile page: change username, email, password and **profile picture** (uploaded to Firebase Storage with a live progress indicator)
-- Delete your own account or sign out
-- **Light / dark theme** toggle, remembered across visits
+**Writing**
+- Rich editor (Tiptap) with Markdown shortcuts (`## heading`, ```` ``` ```` code, `**bold**`), Markdown paste, syntax-highlighted code blocks, links and image upload (paste or drag-and-drop)
+- Drafts that autosave, a live preview, and scheduled publishing
+- Up to five tags per post, with AI tag suggestions
+- Series: group posts into numbered, navigable collections
+- Cover images, read time and view counts
+- Edit history for published posts, and soft delete
+- All post HTML is sanitized on the server with an allow-list
 
-**For admins**
-- Create and update posts with a **rich-text editor** (React Quill), a category and a cover image
-- Dashboard overview: total users, posts and comments, plus how many were added **in the last month**
-- Paginated tables to manage (and delete) all posts, users and comments
+**Community**
+- Follow people and tags; public profiles with followers and following
+- Two reactions, **Like** and **Helpful**, with optimistic UI
+- Bookmarks, organised into collections
+- Threaded comments and replies with `@mention` autocomplete
+- Share menu (native share, copy link, X, LinkedIn, Reddit) and Open Graph / JSON-LD previews rendered on the server
 
----
+**Discovery**
+- **Following**, **Latest** and **Trending** feeds with infinite scroll. Trending weighs views, reactions, comments and bookmarks against age.
+- Search across posts, people and tags, using MongoDB text search or Atlas Search, with prefix matching for search-as-you-type
+- Tag pages, trending topics and related posts (embeddings)
+- Onboarding that asks for interests and suggests writers
+
+**Notifications**
+- Notification center with read/unread state
+- Real-time delivery over Socket.io for follows, reactions, comments, replies and mentions
+- Email notifications (per-type preferences) and a weekly digest, sent by background jobs
+
+**Moderation**
+- Report posts and comments; moderators work through a queue and can dismiss, remove, suspend or ban
+- Roles: `user`, `moderator`, `admin`, with a strict hierarchy
+- Analytics: totals, 7-day growth, 30-day activity charts, top tags and posts
+
+**AI** (optional, degrades gracefully)
+- TL;DR summaries of posts and AI tag suggestions via Claude
+- Related posts via embeddings (Voyage AI, or a built-in local embedding when no key is set)
+
+**Experience**
+- Fully responsive from 320 px phones to large desktop monitors: bottom tab bar on phones, bottom-sheet dialogs, and no horizontal scrolling anywhere
+- Dark mode (light / dark / system) applied before first paint
+- Skeleton loaders, keyboard shortcut `/` for search, accessible labels and focus handling
 
 ## Screenshots
 
-| Home | Post page |
+| Feed | Post (phone, dark mode) |
 |---|---|
-| <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.09.47%20AM.png" alt="Home page hero" /> | <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.11.41%20AM.png" alt="Blog post with read time" /> |
-| **Comments with likes, edit and delete** | **Recent articles** |
-| <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.13.41%20AM.png" alt="Comment section" /> | <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.13.52%20AM.png" alt="Recent article cards" /> |
-| **Admin dashboard: profile** | **Regular user: profile** |
-| <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.43%20AM.png" alt="Admin profile and dashboard sidebar" /> | <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.14.33%20AM.png" alt="User profile update" /> |
-| **About** | **Projects: dark and light theme** |
-| <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.04%20AM.png" alt="About page" /> | <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.17%20AM.png" alt="Projects page, dark theme" /> <img src="mern%20blog%20screen%20shots/Screenshot%202025-11-27%20at%201.10.28%20AM.png" alt="Projects page, light theme" /> |
+| ![Feed](docs/screenshots/feed-desktop.png) | <img src="docs/screenshots/post-dark-mobile.png" width="300" alt="Post page on a phone in dark mode" /> |
+| **Editor** | **Post settings (phone)** |
+| ![Editor](docs/screenshots/editor-desktop.png) | <img src="docs/screenshots/editor-settings-mobile.png" width="300" alt="Editor settings sheet on a phone" /> |
+| **Real-time notifications** | **Moderation queue (phone)** |
+| ![Notifications](docs/screenshots/notifications-desktop.png) | <img src="docs/screenshots/moderation-mobile.png" width="300" alt="Moderation queue on a phone" /> |
+| **Analytics** | |
+| ![Analytics](docs/screenshots/analytics-desktop.png) | |
 
----
-
-## Tech Stack
+## Tech stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18, Vite, React Router v6 |
-| State | Redux Toolkit + redux-persist (user session & theme saved to localStorage) |
-| UI | Tailwind CSS, Flowbite React, React Icons, React Circular Progressbar |
-| Editor | React Quill |
-| Backend | Node.js, Express 4 |
-| Database | MongoDB with Mongoose 8 |
-| Auth | JSON Web Tokens in an httpOnly cookie, bcryptjs password hashing, Firebase Google sign-in |
-| File storage | Firebase Storage (post images and profile pictures) |
-| Dates | Moment.js ("2 hours ago" on comments) |
-
----
+| Frontend | React 19, TypeScript, Vite, React Router, Tailwind CSS 4 |
+| Client state | TanStack Query for server state; Redux Toolkit only for auth and UI state |
+| Editor | Tiptap 3 + lowlight (highlight.js) |
+| Backend | Node.js, Express 5, TypeScript |
+| Validation | Zod (request bodies, queries, params and environment) |
+| Database | MongoDB with Mongoose 9 (ObjectId relations, `populate`, compound/text/TTL indexes) |
+| Cache and jobs | Redis, BullMQ (optional; falls back to in-process) |
+| Real time | Socket.io |
+| Email | Nodemailer (any SMTP; Mailpit locally) |
+| AI | Anthropic Claude API, Voyage AI embeddings (both optional) |
+| Logging | Pino |
+| Docs | OpenAPI 3.1 generated from the route definitions, served with Swagger UI |
+| Testing | Jest + Supertest + mongodb-memory-server (API), Vitest + React Testing Library (UI) |
+| Tooling | ESLint, Docker, docker-compose, GitHub Actions |
 
 ## Architecture
 
-```
-┌──────────────────────────┐        /api/*  (JSON + cookie)       ┌──────────────────────────┐
-│  React SPA (client/)     │ ────────────────────────────────────▶ │  Express API (api/)      │
-│  Vite · Redux · Tailwind │ ◀──────────────────────────────────── │  routes → controllers    │
-└──────────┬───────────────┘                                       └──────────┬───────────────┘
-           │ image uploads                                                    │ Mongoose
-           │ Google sign-in popup                                             ▼
-           ▼                                                       ┌──────────────────────────┐
-┌──────────────────────────┐                                       │  MongoDB                 │
-│  Firebase                │                                       │  users · posts · comments│
-│  Auth + Storage          │                                       └──────────────────────────┘
-└──────────────────────────┘
-```
+```mermaid
+flowchart LR
+  subgraph Browser
+    SPA["React SPA<br/>TanStack Query · Redux (auth/UI)"]
+  end
 
-How a request flows end to end:
+  subgraph Server["Node.js / Express (one process)"]
+    direction TB
+    MW["Middleware<br/>Helmet · CORS · rate limits · CSRF header<br/>auth (JWT cookie) · Zod validation"]
+    R["Routes"] --> C["Controllers"] --> S["Services"] --> M["Mongoose models"]
+    MW --> R
+    IO["Socket.io<br/>(per-user rooms)"]
+    W["BullMQ workers<br/>email · AI enrich · scheduled posts<br/>trending · weekly digest"]
+    SEO["SPA host + SEO meta<br/>sitemap · robots · /uploads"]
+  end
 
-1. The React app calls a relative URL such as `/api/post/getposts`.
-   - **In development**, Vite's proxy ([client/vite.config.js](client/vite.config.js)) forwards `/api` to `http://localhost:3000`.
-   - **In production**, Express serves the built React app from `client/dist`, so the frontend and API share one origin and no proxy is needed.
-2. Express routes the request (`api/routes/*.route.js`). Protected routes first run `verifyToken` ([api/utils/verifyUser.js](api/utils/verifyUser.js)), which reads the `access_token` cookie, verifies the JWT and puts `{ id, isAdmin }` on `req.user`.
-3. The controller (`api/controller/*.controller.js`) checks permissions, talks to MongoDB through the Mongoose models, and returns JSON.
-4. Any error is passed to `next(err)` and handled by one central error middleware in [api/index.js](api/index.js), which always responds with `{ success: false, statusCode, message }`.
-5. Images never pass through the backend. The browser uploads them straight to Firebase Storage and sends only the resulting download URL to the API.
-
----
-
-## Project Structure
-
-```
-mern-blog/
-├── api/                          # Express backend
-│   ├── index.js                  # App entry: DB connection, middleware, routes, static hosting, error handler
-│   ├── controller/               # Request handlers (business logic)
-│   │   ├── auth.controller.js    #   signup, signin, google
-│   │   ├── user.controller.js    #   update, delete, signout, list users, get user
-│   │   ├── post.controller.js    #   create, getposts (search/filter/paginate), update, delete
-│   │   └── comment.controller.js #   create, list, like/unlike, edit, delete
-│   ├── models/                   # Mongoose schemas: User, Post, Comment
-│   ├── routes/                   # Express routers, mounted under /api/*
-│   └── utils/
-│       ├── error.js              # errorHandler(statusCode, message) helper
-│       └── verifyUser.js         # JWT cookie verification middleware
-│
-├── client/                       # React frontend (Vite)
-│   ├── src/
-│   │   ├── App.jsx               # Route definitions
-│   │   ├── main.jsx              # Redux Provider, PersistGate, ThemeProvider
-│   │   ├── firebase.js           # Firebase app initialisation
-│   │   ├── pages/                # Home, About, Projects, Search, SignIn, SignUp,
-│   │   │                         # Dashboard, CreatePost, UpdatePost, PostPage
-│   │   ├── components/           # Header, Footer, PostCard, Comment(Section), OAuth,
-│   │   │                         # Dash* dashboard panels, route guards, ThemeProvider
-│   │   └── redux/                # store.js, user/userSlice.js, theme/themeSlice.js
-│   ├── vite.config.js            # Dev proxy /api → localhost:3000
-│   └── tailwind.config.js
-│
-├── mern blog screen shots/       # Screenshots used in this README
-├── info.txt                      # My original build notes from 2024
-└── package.json                  # Backend deps + root scripts (dev, start, build)
+  SPA -- "REST /api (httpOnly cookies)" --> MW
+  SPA <-- "notifications" --> IO
+  SPA -- "HTML" --> SEO
+  M --> DB[(MongoDB)]
+  S --> RD[(Redis<br/>cache · rate limits · queues)]
+  W --> RD
+  S -- "enqueue" --> W
+  W --> SMTP[[SMTP]]
+  W --> AI[[Claude API / Voyage]]
+  S --> IO
 ```
 
----
+**How a request flows**
 
-## Data Models
+1. The React app calls `/api/...` with credentials. Every state-changing request carries `X-Requested-With: klyro`, a CSRF defence: a cross-site page can't add that header without a CORS preflight, which only the app's own origin passes.
+2. Global middleware applies security headers, CORS, compression, rate limits and the CSRF check, then attaches `req.user` if the access-token cookie is valid.
+3. Each route declares its access level (`public`, `user`, `writer`, `moderator`, `admin`) and its Zod schemas. The same declaration generates the OpenAPI spec, so the docs can't drift from the code.
+4. Controllers stay thin; **services** hold the business logic; **models** define schemas and indexes.
+5. Slow or retryable work (email, AI summaries and embeddings, scheduled publishing, trending scores, the weekly digest) goes to BullMQ. Without Redis it runs in-process, so development needs only MongoDB.
+6. Errors from anywhere end in one error handler that returns `{ success, statusCode, code, message, details? }`.
 
-All three collections have automatic `createdAt` / `updatedAt` timestamps.
+**Design choices worth knowing**
 
-**User** ([api/models/user.model.js](api/models/user.model.js))
+- **Cursor pagination** everywhere lists grow (feeds, comments, notifications, bookmarks, moderation). Cursors are opaque (`base64url({ value, id })`) and backed by compound indexes.
+- **Denormalized counters** (likes, comments, followers…) keep feeds to one query; they're updated with `$inc` alongside the source write.
+- **Redis cache** holds hot posts (60 s), the first page of each public feed (30 s), profiles and trending tags, and is invalidated on writes. Viewer-specific state is never cached.
+- **Trending score** = `(views·0.1 + likes + helpful·2 + comments·1.5 + bookmarks·1.5 + 1) / (hours + 2)^1.5`, recomputed every 10 minutes for the last 30 days of posts.
+- **Server-side SEO**: the SPA's `index.html` gets page-specific `<title>`, Open Graph, Twitter and JSON-LD tags for posts, profiles and tags, so link previews work without server-side rendering.
 
-| Field | Type | Notes |
-|---|---|---|
-| `username` | String | required, unique |
-| `email` | String | required, unique |
-| `password` | String | required, stored as a bcrypt hash |
-| `profilePicture` | String | URL, defaults to a blank avatar |
-| `isAdmin` | Boolean | defaults to `false` |
+## Getting started
 
-**Post** ([api/models/post.model.js](api/models/post.model.js))
-
-| Field | Type | Notes |
-|---|---|---|
-| `userId` | String | the admin who wrote it |
-| `title` | String | required, unique |
-| `content` | String | required, HTML from the rich-text editor |
-| `image` | String | cover image URL, has a default |
-| `category` | String | defaults to `uncategorized` (UI offers javascript, reactjs, nextjs, DSA, CyberSecurity, AIML) |
-| `slug` | String | required, unique, generated from the title |
-
-**Comment** ([api/models/comment.model.js](api/models/comment.model.js))
-
-| Field | Type | Notes |
-|---|---|---|
-| `content` | String | required |
-| `postId` | String | the post being commented on |
-| `userId` | String | the comment author |
-| `likes` | Array | ids of users who liked it |
-| `numberOfLikes` | Number | defaults to `0` |
-
----
-
-## Authentication & Authorization
-
-**Sign-up** hashes the password with bcrypt (10 salt rounds) and saves the user.
-
-**Sign-in** compares the password hash, then signs a JWT containing `{ id, isAdmin }` with `JWT_SECRET` and sends it as an **httpOnly cookie** named `access_token`. Because JavaScript can't read the cookie, the token is protected from XSS theft. The response body holds the user object (without the password), which the frontend stores in Redux.
-
-**Google sign-in** opens a Firebase popup. The frontend sends the Google name, email and photo to `/api/auth/google`:
-- if the email already exists, that user is signed in;
-- otherwise a new user is created with a generated username and a random hashed password.
-
-**Session persistence**: `redux-persist` keeps `currentUser` and the theme in localStorage, so a page refresh doesn't log you out. The cookie is what the server actually trusts.
-
-**Roles**
-- There is no sign-up flow for admins. To make someone an admin, set `isAdmin: true` on their user document directly in MongoDB.
-- Frontend guards: `PrivateRoute` requires a signed-in user and `OnlyAdminPrivateRoute` requires an admin. Both redirect to `/sign-in` otherwise.
-- The backend enforces the same rules in the controllers, so the UI guards are only for convenience, not security.
-
-| Action | Who can do it |
-|---|---|
-| Read posts and comments | anyone |
-| Comment, like a comment | signed-in users |
-| Edit / delete a comment | its author or an admin |
-| Update own profile | that user only |
-| Delete an account | that user or an admin |
-| Create / update / delete posts | admins |
-| List all users / all comments | admins |
-
----
-
-## API Reference
-
-Base URL: `/api`. 🔒 means the `access_token` cookie is required.
-
-### Auth — `/api/auth`
-
-| Method | Endpoint | Body | Description |
-|---|---|---|---|
-| POST | `/signup` | `{ username, email, password }` | Create an account |
-| POST | `/signin` | `{ email, password }` | Sign in and set the auth cookie |
-| POST | `/google` | `{ name, email, googlePhotoUrl }` | Sign in or sign up with Google |
-
-### Users — `/api/user`
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/test` | Health check: `{ message: "API is working!" }` |
-| PUT | `/update/:userId` 🔒 | Update your own username, email, password, profilePicture. Username must be 7–20 characters, lowercase letters and digits only. Password must be at least 6 characters. |
-| DELETE | `/delete/:userId` 🔒 | Delete your own account (or any account, as admin) |
-| POST | `/signout` | Clear the auth cookie |
-| GET | `/getusers` 🔒 admin | Paginated users. Query: `startIndex`, `limit` (default 9), `sort=asc\|desc`. Returns `{ users, totalUsers, lastMonthUsers }` |
-| GET | `/:userId` | Public profile of one user (used to show comment authors) |
-
-### Posts — `/api/post`
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/create` 🔒 admin | Body `{ title, content, category?, image? }`. The slug is generated from the title. |
-| GET | `/getposts` | Search and list posts. Returns `{ posts, totalPosts, lastMonthPosts }` |
-| PUT | `/updatepost/:postId/:userId` 🔒 admin | Update title, content, category, image |
-| DELETE | `/deletepost/:postId/:userId` 🔒 admin | Delete a post |
-
-`GET /getposts` query parameters (all optional, and they can be combined):
-
-| Param | Effect |
-|---|---|
-| `searchTerm` | case-insensitive match on title **or** content |
-| `category` | exact category |
-| `slug` | a single post by slug (used by the post page) |
-| `postId` | a single post by id (used by the edit page) |
-| `userId` | posts by one author |
-| `order` | `asc` or `desc` (default) by last update |
-| `startIndex`, `limit` | pagination (default limit 9) |
-
-Example: `/api/post/getposts?searchTerm=react&category=reactjs&order=desc&limit=5`
-
-### Comments — `/api/comment`
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/create` 🔒 | Body `{ content, postId, userId }`. `userId` must match the signed-in user. |
-| GET | `/getPostComments/:postId` | All comments on a post, newest first |
-| PUT | `/likeComment/:commentId` 🔒 | Toggle a like from the current user |
-| PUT | `/editComment/:commentId` 🔒 | Edit (author or admin) |
-| DELETE | `/deleteComment/:commentId` 🔒 | Delete (author or admin) |
-| GET | `/getcomments` 🔒 admin | Paginated comments. Returns `{ comments, totalComments, lastMonthComments }` |
-
-### Error format
-
-Every error response has the same shape:
-
-```json
-{ "success": false, "statusCode": 403, "message": "You are not allowed to create a post" }
-```
-
----
-
-## Frontend Routes
-
-| Path | Page | Access |
-|---|---|---|
-| `/` | Home: hero, call-to-action, recent posts | public |
-| `/about` | About the blog | public |
-| `/projects` | Project showcase cards | public |
-| `/search` | Search with keyword, sort and category filters (state kept in the URL) | public |
-| `/post/:postSlug` | Full post, comments, recent articles | public |
-| `/sign-in`, `/sign-up` | Auth forms + Google button | public |
-| `/dashboard?tab=...` | `profile` for everyone; `dash`, `posts`, `users`, `comments` for admins | signed in |
-| `/create-post` | Rich-text post editor with image upload | admin |
-| `/update-post/:postId` | Edit an existing post | admin |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- **Node.js 18+** and npm
-- A **MongoDB** database, either local or a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster
-- A **Firebase** project with **Authentication → Google** enabled and **Storage** turned on
-
-### 1. Clone and install
+**Prerequisites:** Node.js 20.19+ (22 recommended) and Docker (or your own MongoDB).
 
 ```bash
 git clone https://github.com/Aakif9866/mern-blog.git
 cd mern-blog
+git checkout v2
+npm install                           # installs the server and client workspaces
 
-npm install                 # backend dependencies
-npm install --prefix client # frontend dependencies
+cp .env.example .env                  # then set JWT_ACCESS_SECRET at least
+docker compose up -d mongo redis mailpit
+npm run seed                          # optional: demo users and posts
+npm run dev                           # API on :3000, web app on :5173
 ```
 
-### 2. Configure environment variables
+Open http://localhost:5173. With the seed data, sign in as `admin@klyro.dev`, `maya@klyro.dev` (moderator) or `sam@klyro.dev`; the password is `password123` for all of them. Emails (verification, password reset, notifications) land in Mailpit at http://localhost:8025.
 
-Create **two** `.env` files (see the [next section](#environment-variables) for details):
+> If a port is taken on your machine, override it: `REDIS_PORT=6380 docker compose up -d mongo redis mailpit`, and set `REDIS_URL=redis://127.0.0.1:6380` in `.env`.
+
+**Run the whole stack in Docker** (production build, app on http://localhost:3000):
 
 ```bash
-# ./.env  (backend, project root)
-MONGO=mongodb+srv://<user>:<password>@<cluster>/<db>
-JWT_SECRET=<any-long-random-string>
+docker compose --profile app up --build
 ```
 
-```bash
-# ./client/.env  (frontend)
-VITE_FIREBASE_API_KEY=<your-firebase-web-api-key>
-```
+## Configuration
 
-If you use your own Firebase project, also replace the `authDomain`, `projectId`, `storageBucket`, `messagingSenderId` and `appId` values in [client/src/firebase.js](client/src/firebase.js).
+All settings are environment variables, validated at startup with Zod. The full list with comments is in [`.env.example`](.env.example).
 
-### 3. Run in development
+| Variable | Required | Purpose |
+|---|---|---|
+| `MONGO_URI` | yes | MongoDB connection string (`MONGO`, the v1 name, is also accepted) |
+| `JWT_ACCESS_SECRET` | in production | Signs access tokens (`JWT_SECRET`, the v1 name, is also accepted) |
+| `APP_URL` | yes | Public URL, used in emails, SEO tags and CORS |
+| `REDIS_URL` | no | Enables caching, shared rate limits and BullMQ jobs |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | no | Email delivery. Without them, emails are printed to the log. |
+| `GOOGLE_CLIENT_ID` | no | Enables "Continue with Google" |
+| `ANTHROPIC_API_KEY`, `AI_MODEL` | no | AI TL;DRs and tag suggestions (default model `claude-opus-5`) |
+| `VOYAGE_API_KEY` | no | Higher-quality embeddings for related posts |
+| `ATLAS_SEARCH` | no | `true` to use an Atlas Search index named `posts` |
 
-Use two terminals:
-
-```bash
-# Terminal 1: API on http://localhost:3000 (auto-restarts with nodemon)
-npm run dev
-```
-
-```bash
-# Terminal 2: React app on http://localhost:5173 (proxies /api to :3000)
-cd client
-npm run dev
-```
-
-Open http://localhost:5173.
-
-### 4. Make yourself an admin
-
-Sign up in the app, then in MongoDB (Atlas UI, Compass or `mongosh`):
-
-```js
-db.users.updateOne({ email: "you@example.com" }, { $set: { isAdmin: true } })
-```
-
-Sign out and back in so the new role is included in your JWT. The **Create a post** button and the admin dashboard tabs will then appear.
-
----
-
-## Environment Variables
-
-| Variable | Where | Used by | Purpose |
-|---|---|---|---|
-| `MONGO` | root `.env` | [api/index.js](api/index.js) | MongoDB connection string |
-| `JWT_SECRET` | root `.env` | auth controller, `verifyToken` | Secret for signing and verifying JWTs |
-| `VITE_FIREBASE_API_KEY` | `client/.env` | [client/src/firebase.js](client/src/firebase.js) | Firebase web API key (Vite only exposes variables that start with `VITE_`) |
-
-`.env` is listed in `.gitignore`. Never commit real credentials.
-
----
+Every optional feature degrades gracefully: without an AI key there are no TL;DRs and tag suggestions come from keyword matching; without Redis, jobs run in-process and caching is off.
 
 ## Scripts
 
-Root `package.json` (backend):
+Run from the repository root:
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Start the API with nodemon (restarts when files change) |
-| `npm start` | Start the API with node (production) |
-| `npm run build` | Install backend and client deps, then build the React app into `client/dist` |
+| `npm run dev` | API (tsx watch) and web app (Vite) together |
+| `npm run build` | Install dependencies and build client + server |
+| `npm start` | Start the production server (serves the API and the built app) |
+| `npm run lint` / `npm run typecheck` / `npm test` | Quality checks for both workspaces |
+| `npm run seed` | Demo data for an empty local database (`-- --force` wipes it first; refuses in production) |
+| `npm run migrate:v1` | Migrate a v1 database; dry run by default, `-- --apply` to write |
 
-`client/package.json` (frontend):
+## Testing and quality
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Vite dev server |
-| `npm run build` | Production build into `client/dist` |
-| `npm run preview` | Serve the production build locally |
-| `npm run lint` | ESLint |
+```bash
+npm run lint && npm run typecheck && npm test
+```
 
----
+- **API: 41 Jest + Supertest tests** against an in-memory MongoDB. They cover auth (refresh-token rotation and reuse detection, sign out everywhere, email verification, password reset, CSRF), posts (drafts, sanitization, scheduling, edit history, cursor pagination, views, search), social features (follows, reactions, bookmarks and collections, nested comments and mentions, notifications, account deletion) and moderation (queue, role hierarchy, suspension, analytics).
+- **UI: 13 Vitest + React Testing Library tests**: the API client's silent refresh, forms and validation errors, optimistic reactions, the tag input, and mention and link rendering.
+- **CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs lint → typecheck → test → build, then checks that the Docker image builds.
+- Before release, v2 was also driven end to end in a real browser (Playwright): 20 user flows on phone and desktop viewports, from sign-up to password reset, with real-time notifications and email. A responsive audit loaded every page at 320, 360, 390, 768, 1024, 1280 and 1920 px, checking for horizontal overflow, tiny tap targets, unreadable text and console errors. Both passed on the production Docker build.
+
+## API
+
+- Interactive docs: **`/api/docs`** (Swagger UI)
+- Machine-readable spec: **`/api/openapi.json`**
+
+Conventions:
+- Auth uses httpOnly cookies set by `/api/auth/login`, `/register` or `/google`. `/api/auth/session` returns the current user or `null`.
+- Send `X-Requested-With: klyro` on every non-GET request.
+- List endpoints return `{ items, nextCursor }`; pass `cursor=<nextCursor>` for the next page.
+- Errors return `{ success: false, statusCode, code, message, details? }`.
+
+## Security
+
+- **Sessions**: short-lived access JWT (15 min) plus a rotating refresh token, both in `httpOnly`, `SameSite=Lax`, `Secure` (in production) cookies. Nothing auth-related is stored in `localStorage`. Refresh tokens are stored hashed; reusing a rotated token revokes the whole login family. "Sign out everywhere" revokes all sessions and invalidates outstanding access tokens.
+- **Accounts**: bcrypt (12 rounds) with timing-safe login, email verification, and single-use hashed reset tokens that expire. Google sign-in verifies the ID token on the server; v1 trusted whatever email the browser sent.
+- **Input**: Zod validation on every endpoint; post HTML sanitized with an allow-list; uploads checked by magic bytes (not just the MIME type) and size-limited, then served with a restrictive CSP.
+- **HTTP**: Helmet (CSP, HSTS, frame and referrer policies), strict CORS, request size limits, a CSRF header check, and rate limits (general, auth, writes, AI) backed by Redis when available.
+- **Moderation**: role hierarchy enforced on the server (moderators can't act on moderators or admins; only admins ban or change roles); banned users lose their sessions immediately.
 
 ## Deployment
 
-The app deploys as a **single Node service**: Express serves both the API and the built React app.
+Klyro deploys as **one Node service** that serves the API, WebSocket and built web app together.
+
+**Render / Railway / any Node host**
+- Build command: `npm run build`
+- Start command: `npm start`
+- Environment: at least `NODE_ENV=production`, `MONGO_URI`, `JWT_ACCESS_SECRET`, `APP_URL`. Add `REDIS_URL` and SMTP settings for jobs and email.
+- Uploaded images are written to local disk (`server/uploads`). On hosts with ephemeral disks, attach a persistent volume or swap `saveImage()` in `server/src/lib/storage.ts` for S3 or Cloudinary.
+
+**Docker**: `docker build -t klyro .` produces a small non-root image with a health check (`/api/health`).
+
+## Upgrading from v1
+
+v2 reads the same MongoDB collections (`users`, `posts`, `comments`) and converts them in place:
 
 ```bash
-npm run build   # builds client/dist
-npm start       # serves /api/* and the SPA on port 3000
+mongodump --uri "$MONGO_URI" --out backup-before-v2   # always back up first
+npm run migrate:v1                                    # dry run: shows what will change
+npm run migrate:v1 -- --apply                         # write the changes
 ```
 
-Any route that doesn't match `/api/*` returns `client/dist/index.html`, so React Router handles deep links like `/post/some-slug` on refresh.
+What it does:
+- `isAdmin` becomes `role`.
+- Existing members are marked email-verified.
+- The v1 default avatar and cover image are dropped.
+- `category` becomes a tag.
+- Post HTML is sanitized, and excerpts and read time are computed.
+- String ids become ObjectId references.
+- Comment likes become reactions.
+- Counters are recomputed, and v1's unique-title index is replaced with v2's indexes.
 
-The live version runs on **Render** with **MongoDB Atlas**. On Render (or a similar host such as Railway):
-- **Build command:** `npm run build`
-- **Start command:** `npm start`
-- **Environment:** `MONGO`, `JWT_SECRET`, and `VITE_FIREBASE_API_KEY` (the Vite variable must be present **at build time**)
-- Add the deployed domain to Firebase **Authentication → Authorized domains** so Google sign-in works.
+Existing `/post/<slug>` links keep working. The script is idempotent, so running it again is safe. v1 passwords (bcrypt) keep working.
 
----
+## Project structure
 
-## Known Limitations / v2 Roadmap
+```
+.
+├── server/                    Express API (TypeScript)
+│   ├── src/
+│   │   ├── config/            env (Zod), database
+│   │   ├── routes/            route table with access levels + schemas (also builds OpenAPI)
+│   │   ├── controllers/       thin HTTP handlers
+│   │   ├── services/          business logic (auth, posts, feeds, comments, moderation, AI…)
+│   │   ├── models/            Mongoose schemas and indexes
+│   │   ├── validators/        Zod schemas
+│   │   ├── middleware/        auth, validation, errors, security, uploads
+│   │   ├── lib/               cache, queue, mailer, socket, pagination, sanitize, SEO, AI
+│   │   ├── jobs/              BullMQ job registration and schedules
+│   │   ├── docs/              OpenAPI generation
+│   │   └── scripts/           seed, v1 migration
+│   └── tests/                 Jest + Supertest
+├── client/                    React app (TypeScript)
+│   └── src/
+│       ├── pages/             route screens
+│       ├── components/        ui primitives, layout, post, comments, editor
+│       ├── api/               TanStack Query hooks and keys
+│       ├── store/             Redux: auth + UI only
+│       ├── lib/               API client, socket, session, formatting
+│       └── test/              Vitest + Testing Library
+├── docs/screenshots/
+├── Dockerfile · docker-compose.yml · .env.example
+└── .github/workflows/ci.yml
+```
 
-Things I'd do differently now, and the plan for this branch:
+## Project timeline
 
-- [ ] Read the port from `process.env.PORT` instead of hard-coding `3000` (many hosts assign a port)
-- [ ] Add `return` before `next(errorHandler(...))` in signup/signin validation, so a request with missing fields stops there instead of continuing
-- [ ] Set JWT expiry and `secure` / `sameSite` cookie options for production
-- [ ] Let admins edit and delete posts written by *other* admins (currently only the author can)
-- [ ] Fix outdated code comments, e.g. the comment `create` route says "only admins can create" but any signed-in user can
-- [ ] Sanitize rich-text HTML on the server before storing and rendering it
-- [ ] Add server-side validation (e.g. zod/joi) and rate limiting on auth routes
-- [ ] Delete a user's comments (and optionally posts) when the account is deleted
-- [ ] Add tests (Jest + Supertest for the API, Vitest + React Testing Library for the client)
-- [ ] Add a `.env.example` and a single `npm run dev` that starts both servers (e.g. `concurrently`)
+| Milestone | Date |
+|---|---|
+| Project started (first commit) | 4 Feb 2024 |
+| v1 feature-complete and deployed to Render | 10 Apr 2024 |
+| Screenshots and first README | 27 Nov 2025 |
+| v2 (Klyro) rebuild | 27 Sep 2026 |
 
----
+## Roadmap
 
-## Author
-
-[@Aakif9866](https://github.com/Aakif9866)
+Deliberately out of scope for v2, and candidates for later versions: Next.js / server rendering, splitting into services, a CDN and object storage for media, Elasticsearch, and a metrics and tracing stack.

@@ -1,6 +1,7 @@
 import { createServer } from "node:http";
 import { env } from "./config/env";
-import { connectDb, disconnectDb } from "./config/db";
+import { connectDb, disconnectDb, ensureIndexes } from "./config/db";
+import "./models";
 import { createApp } from "./app";
 import { logger } from "./lib/logger";
 import { getRedis, closeRedis } from "./lib/redis";
@@ -10,6 +11,7 @@ import { stopJobs } from "./lib/queue";
 
 async function main() {
   await connectDb();
+  await ensureIndexes();
   getRedis();
   registerJobs();
 

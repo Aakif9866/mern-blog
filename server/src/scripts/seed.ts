@@ -6,6 +6,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { connectDb, disconnectDb } from "../config/db";
+import { closeRedis } from "../lib/redis";
 import { env } from "../config/env";
 import { User } from "../models/User";
 import { Post, type PostDoc } from "../models/Post";
@@ -75,6 +76,8 @@ async function main() {
     if (!FORCE) throw new Error("Database is not empty. Use --force to wipe it first (local databases only).");
     await mongoose.connection.dropDatabase();
   }
+  // Recreate every index (text search, uniques, TTLs) on the fresh database.
+  await Promise.all(Object.values(mongoose.models).map((m) => m.syncIndexes()));
 
   const password = await bcrypt.hash("password123", 12);
   const users = new Map<string, InstanceType<typeof User>>();
@@ -136,10 +139,12 @@ async function main() {
   await recomputeTrending();
   await recomputeTrendingTags();
   console.log(`Seeded ${people.length} users and ${posts.length + 1} posts. Sign in as admin@klyro.dev / password123`);
-  await disconnectDb();
+  await Promise.all([disconnectDb(), closeRedis()]);
 }
 
-main().catch(async (err) => {
+main()
+  .then(() => process.exit(0))
+  .catch(async (err) => {
   console.error(err.message ?? err);
   await disconnectDb();
   process.exit(1);

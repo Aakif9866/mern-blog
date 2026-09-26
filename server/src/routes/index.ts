@@ -27,6 +27,7 @@ a.post("/google", { summary: "Sign in with a Google ID token", body: v.googleBod
 a.post("/refresh", { summary: "Rotate the refresh token and issue a new access token" }, auth.refresh);
 a.post("/logout", { summary: "Sign out of this device" }, auth.logout);
 a.post("/logout-all", { summary: "Sign out of every device", access: "user" }, auth.logoutAll);
+a.get("/session", { summary: "Current session: the user, or null for guests (restores from the refresh cookie)" }, auth.session);
 a.get("/me", { summary: "The signed-in user's account", access: "user" }, auth.me);
 a.get("/sessions", { summary: "Active sessions for this account", access: "user" }, auth.sessions);
 a.delete("/sessions/:id", { summary: "Revoke one session", access: "user", params: v.idParam }, auth.revokeSession);

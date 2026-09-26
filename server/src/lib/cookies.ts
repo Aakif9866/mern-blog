@@ -8,7 +8,7 @@ const REFRESH_PATH = "/api/auth";
 function base(): CookieOptions {
   return {
     httpOnly: true,
-    secure: env.isProd,
+    secure: env.isProd && !env.COOKIE_INSECURE,
     sameSite: "lax",
     ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
   };

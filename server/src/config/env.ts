@@ -28,6 +28,8 @@ const schema = z.object({
   ACCESS_TOKEN_TTL: z.string().default("15m"),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
   COOKIE_DOMAIN: optionalString,
+  /** Allow auth cookies over plain HTTP in production mode (local Docker only). */
+  COOKIE_INSECURE: bool,
 
   SMTP_HOST: optionalString,
   SMTP_PORT: z.coerce.number().int().positive().default(587),

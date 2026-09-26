@@ -18,8 +18,8 @@
     "lint": "npm run lint -w server && npm run lint -w client",
     "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
     "test": "npm run test -w server && npm run test -w client",
-    "migrate:v1": "npm run migrate:v1 -w server",
-    "seed": "npm run seed -w server"
+    "migrate:v1": "npm run migrate:v1 -w server --",
+    "seed": "npm run seed -w server --"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

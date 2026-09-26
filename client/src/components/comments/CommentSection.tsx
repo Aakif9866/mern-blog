@@ -125,7 +125,7 @@ function CommentView({ node, postId, depth }: { node: Node; postId: string; dept
                 {me && (
                   <Menu
                     trigger={({ toggle, open, id }) => (
-                      <button onClick={toggle} aria-expanded={open} aria-controls={id} className="-mr-1.5 ml-auto rounded p-1 text-ink-soft hover:bg-line/60" aria-label="Comment actions">
+                      <button onClick={toggle} aria-expanded={open} aria-controls={id} className="-my-1.5 -mr-2 ml-auto flex h-8 w-8 items-center justify-center rounded-lg text-ink-soft hover:bg-line/60" aria-label="Comment actions">
                         <MoreHorizontal className="h-4 w-4" />
                       </button>
                     )}

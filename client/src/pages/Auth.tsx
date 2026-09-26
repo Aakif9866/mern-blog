@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { CheckCircle2, MailCheck, XCircle } from "lucide-react";
 import { api, ApiError, errorMessage } from "@/lib/api";
 import type { Me } from "@/lib/types";
@@ -134,19 +134,23 @@ export function VerifyEmail() {
   const token = params.get("token");
   const dispatch = useAppDispatch();
   const me = useMe();
-  const verify = useMutation({
-    mutationFn: () => api.post<{ user: Me }>("/auth/verify-email", { token: token ?? "" }),
-    onSuccess: (r) => {
-      if (me && me._id === r.user._id) dispatch(signedIn(r.user));
-    },
+  // A query (not an effect + mutation) so the one-time token is sent exactly once,
+  // even when React runs effects twice or the component re-mounts.
+  const verify = useQuery({
+    queryKey: ["verify-email", token],
+    queryFn: () => api.post<{ user: Me }>("/auth/verify-email", { token: token ?? "" }),
+    enabled: Boolean(token),
+    retry: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
-  const { mutate } = verify;
+  const verifiedUser = verify.data?.user;
   useEffect(() => {
-    if (token) mutate();
-  }, [token, mutate]);
+    if (verifiedUser && me && me._id === verifiedUser._id && !me.emailVerified) dispatch(signedIn(verifiedUser));
+  }, [verifiedUser, me, dispatch]);
 
   if (!token) return <AuthCard title="Check your inbox" subtitle="Open the link we emailed you to verify your address." children={<MailCheck className="h-10 w-10 text-brand-600" />} />;
-  if (verify.isPending || verify.isIdle) return <PageSpinner />;
+  if (verify.isPending) return <PageSpinner />;
   return verify.isSuccess ? (
     <AuthCard title="Email verified" subtitle="You're all set to write and join discussions.">
       <CheckCircle2 className="mb-5 h-10 w-10 text-emerald-500" />

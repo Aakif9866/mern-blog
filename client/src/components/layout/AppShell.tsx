@@ -64,7 +64,9 @@ export function AppShell() {
     if (me && me.emailVerified && !me.onboarded && !NO_ONBOARDING.some((p) => pathname.startsWith(p))) navigate("/onboarding");
   }, [me, pathname, navigate]);
 
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="flex min-h-dvh flex-col">

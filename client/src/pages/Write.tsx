@@ -417,10 +417,16 @@ function Write({ sessionKey, initial }: { sessionKey: string; initial?: Post }) 
               Tip: add a few tags in post settings so readers can find this post.
             </p>
           )}
-          <div className="grid grid-cols-2 gap-2">
+          <div role="radiogroup" aria-label="When to publish" className="grid grid-cols-2 gap-2">
             {(["now", "later"] as const).map((m) => (
-              <button key={m} onClick={() => setMode(m)} aria-pressed={mode === m} className={clsx("rounded-lg border px-3 py-3 text-sm font-medium", mode === m ? "border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200" : "border-line hover:bg-muted")}>
-                {m === "now" ? "Publish now" : "Schedule"}
+              <button
+                key={m}
+                role="radio"
+                aria-checked={mode === m}
+                onClick={() => setMode(m)}
+                className={clsx("rounded-lg border px-3 py-3 text-sm font-medium", mode === m ? "border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200" : "border-line hover:bg-muted")}
+              >
+                {m === "now" ? "Right now" : "Schedule for later"}
               </button>
             ))}
           </div>

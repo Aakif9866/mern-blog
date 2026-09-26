@@ -28,6 +28,7 @@ describe("utilities", () => {
   it("computes read time and excerpts", () => {
     expect(readTimeMinutes(`<p>${"word ".repeat(450)}</p>`)).toBe(2);
     expect(excerptFrom(`<p>${"alpha ".repeat(100)}</p>`, 20)).toMatch(/…$/);
+    expect(excerptFrom("<h2>Title</h2><p>First.</p><ul><li>One</li><li>Two</li></ul>")).toBe("Title First. One Two");
   });
 
   it("ranks similar text higher with local embeddings", () => {

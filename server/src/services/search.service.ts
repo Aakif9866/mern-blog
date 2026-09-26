@@ -5,7 +5,7 @@ import { env } from "../config/env";
 import { POST_CARD_FIELDS } from "./post.service";
 import { searchUsers } from "./user.service";
 import { searchTags } from "./tag.service";
-import { normalizeTag } from "../lib/text";
+import { escapeRegex, normalizeTag } from "../lib/text";
 
 export type SearchType = "posts" | "users" | "tags";
 
@@ -64,6 +64,19 @@ export async function searchPosts(opts: PostSearchOpts) {
     .limit(opts.limit + 1)
     .populate("author", PUBLIC_USER_FIELDS)
     .lean();
+
+  // $text only matches whole words, so "flex" misses "flexbox". Top up the first
+  // page with title matches on word prefixes so search-as-you-type feels right.
+  if (opts.page === 1 && items.length < opts.limit) {
+    const words = opts.q.trim().split(/\s+/).filter(Boolean).slice(0, 5).map(escapeRegex);
+    const prefix = await Post.find({ ...PUBLISHED, ...tagFilter, _id: { $nin: items.map((i) => i._id) }, $and: words.map((w) => ({ title: { $regex: `\\b${w}`, $options: "i" } })) })
+      .select(POST_CARD_FIELDS)
+      .sort({ trendingScore: -1, publishedAt: -1 })
+      .limit(opts.limit - items.length)
+      .populate("author", PUBLIC_USER_FIELDS)
+      .lean();
+    items.push(...(prefix as typeof items));
+  }
   return { items: items.slice(0, opts.limit), hasMore: items.length > opts.limit, page: opts.page };
 }
 

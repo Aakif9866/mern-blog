@@ -112,6 +112,8 @@ describe("posts", () => {
     await publishedPost(c, "Understanding quantum widgets", { tags: ["physics"] });
     const search = await client().get("/api/search?q=quantum&type=posts").expect(200);
     expect(search.body.items[0].title).toBe("Understanding quantum widgets");
+    const prefix = await client().get("/api/search?q=quan%20widg").expect(200);
+    expect(prefix.body.posts.map((p: { title: string }) => p.title)).toContain("Understanding quantum widgets");
     const tag = await client().get("/api/tags/physics/posts").expect(200);
     expect(tag.body.items).toHaveLength(1);
     const tagInfo = await client().get("/api/tags/physics").expect(200);

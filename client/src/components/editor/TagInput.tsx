@@ -25,7 +25,7 @@ export function TagInput({ value, onChange, id }: { value: string[]; onChange: (
       {value.map((t) => (
         <span key={t} className="inline-flex items-center gap-1 rounded-full bg-brand-50 py-1 pl-2.5 pr-1 text-sm font-medium text-brand-700 dark:bg-brand-900/50 dark:text-brand-200">
           #{t}
-          <button type="button" onClick={() => onChange(value.filter((x) => x !== t))} className="rounded-full p-0.5 hover:bg-brand-100 dark:hover:bg-brand-800" aria-label={`Remove tag ${t}`}>
+          <button type="button" onClick={() => onChange(value.filter((x) => x !== t))} className="-my-1 flex h-8 w-8 items-center justify-center rounded-full hover:bg-brand-100 dark:hover:bg-brand-800" aria-label={`Remove tag ${t}`}>
             <X className="h-3.5 w-3.5" />
           </button>
         </span>

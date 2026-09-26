@@ -18,8 +18,8 @@ export function useSessionBootstrap() {
   useEffect(() => {
     setSessionExpiredHandler(() => dispatch(signedOut()));
     api
-      .get<{ user: Me }>("/auth/me")
-      .then((r) => dispatch(signedIn(r.user)))
+      .get<{ user: Me | null }>("/auth/session")
+      .then((r) => dispatch(r.user ? signedIn(r.user) : signedOut()))
       .catch(() => dispatch(signedOut()));
   }, [dispatch]);
 

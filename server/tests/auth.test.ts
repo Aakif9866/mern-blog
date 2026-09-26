@@ -98,3 +98,19 @@ describe("auth", () => {
     expect(list.body.items[0].current).toBe(true);
   });
 });
+
+describe("session probe", () => {
+  it("returns null for guests without a 401", async () => {
+    const res = await client().get("/api/auth/session").expect(200);
+    expect(res.body).toEqual({ user: null });
+  });
+
+  it("restores a session from the refresh cookie alone", async () => {
+    const c = client();
+    const reg = await c.post("/api/auth/register").send({ username: "probe", email: "probe@test.dev", password: "password123" }).expect(201);
+    const refresh = (reg.headers["set-cookie"] as unknown as string[]).find((x) => x.startsWith("refresh_token="))!.split(";")[0]!;
+    const res = await client().get("/api/auth/session").set("Cookie", refresh).expect(200);
+    expect(res.body.user.username).toBe("probe");
+    expect((res.headers["set-cookie"] as unknown as string[]).some((x) => x.startsWith("access_token="))).toBe(true);
+  });
+});

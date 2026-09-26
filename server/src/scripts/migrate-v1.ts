@@ -9,6 +9,7 @@
  */
 import mongoose, { Types } from "mongoose";
 import { connectDb, disconnectDb } from "../config/db";
+import { closeRedis } from "../lib/redis";
 import { sanitizePostHtml } from "../lib/sanitize";
 import { excerptFrom, normalizeTag, readTimeMinutes } from "../lib/text";
 import { Post } from "../models/Post";
@@ -144,10 +145,12 @@ async function main() {
     await Promise.all([User.syncIndexes(), Post.syncIndexes(), Comment.syncIndexes(), Tag.syncIndexes()]);
   }
   console.log(`\n${users} users, ${posts} posts, ${comments} comments ${APPLY ? "migrated" : "would be migrated"}.`);
-  await disconnectDb();
+  await Promise.all([disconnectDb(), closeRedis()]);
 }
 
-main().catch(async (err) => {
+main()
+  .then(() => process.exit(0))
+  .catch(async (err) => {
   console.error(err);
   await disconnectDb();
   process.exit(1);

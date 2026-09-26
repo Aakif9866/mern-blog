@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { Bell, Home, PenSquare, Search, User } from "lucide-react";
 import clsx from "clsx";
 import { useAppDispatch, useMe } from "@/store";
@@ -12,7 +12,9 @@ export function MobileTabBar() {
   const me = useMe();
   const dispatch = useAppDispatch();
   const { data } = useUnreadCount(Boolean(me));
-  if (!me) return null;
+  const { pathname } = useLocation();
+  // The editor needs the whole screen (and room for the keyboard).
+  if (!me || pathname.startsWith("/write")) return null;
   const cls = ({ isActive }: { isActive: boolean }) => clsx(item, isActive ? "text-brand-600 dark:text-brand-300" : "text-ink-soft");
   return (
     <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur-md sm:hidden" aria-label="Primary">

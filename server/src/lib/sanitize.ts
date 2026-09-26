@@ -50,7 +50,9 @@ export function sanitizePostHtml(html: string): string {
 }
 
 export function htmlToText(html: string): string {
-  return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} })
+  // Block boundaries become spaces so paragraphs don't run together.
+  const spaced = html.replace(/<\/(p|h[1-6]|li|pre|blockquote|div|tr|td|th|figcaption)>|<br\s*\/?>/gi, " ");
+  return sanitizeHtml(spaced, { allowedTags: [], allowedAttributes: {} })
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")

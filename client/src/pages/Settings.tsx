@@ -179,7 +179,7 @@ function NotificationSettings({ me }: { me: Me }) {
             {me.followedTags.map((t) => (
               <span key={t} className="inline-flex items-center gap-1 rounded-full bg-muted py-1 pl-3 pr-1 text-sm">
                 #{t}
-                <button onClick={() => unfollow.mutate(t)} className="rounded-full p-1 hover:bg-line" aria-label={`Unfollow ${t}`}>
+                <button onClick={() => unfollow.mutate(t)} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-line" aria-label={`Unfollow ${t}`}>
                   <X className="h-3.5 w-3.5" />
                 </button>
               </span>

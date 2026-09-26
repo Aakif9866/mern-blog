@@ -37,7 +37,7 @@ function limiter(name: string, options: Partial<Options>) {
   });
 }
 
-export const apiLimiter = limiter("api", { windowMs: 60_000, limit: 300 });
-export const authLimiter = limiter("auth", { windowMs: 15 * 60_000, limit: 20 });
+export const apiLimiter = limiter("api", { windowMs: 60_000, limit: env.isProd ? 300 : 5000 });
+export const authLimiter = limiter("auth", { windowMs: 15 * 60_000, limit: env.isProd ? 20 : 500 });
 export const writeLimiter = limiter("write", { windowMs: 60_000, limit: 30, skip: (req) => env.isTest || SAFE_METHODS.has(req.method) });
 export const aiLimiter = limiter("ai", { windowMs: 60 * 60_000, limit: 30 });
