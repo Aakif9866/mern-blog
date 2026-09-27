@@ -10,6 +10,8 @@
 
 Klyro started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild into a production-quality community platform: anyone can write, readers follow people and topics, discussions are threaded, a moderation team keeps things healthy, and it works just as well on a phone as on a desktop.
 
+> **Project status:** v2 lives on the [`v2` branch](https://github.com/Aakif9866/mern-blog/tree/v2) and is feature-complete and tested, but not deployed yet. The live site ([mern-blog-final.onrender.com](https://mern-blog-final.onrender.com)) still runs v1 from `main`, and `v1` is kept as a backup branch. What's done and what's next: [`docs/PROGRESS.md`](docs/PROGRESS.md).
+
 ---
 
 ## Contents
@@ -19,6 +21,7 @@ Klyro started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild
 - [Tech stack](#tech-stack)
 - [Architecture](#architecture)
 - [Getting started](#getting-started)
+- [Demo data](#demo-data)
 - [Configuration](#configuration)
 - [Scripts](#scripts)
 - [Testing and quality](#testing-and-quality)
@@ -171,11 +174,17 @@ npm install                           # installs the server and client workspace
 
 cp .env.example .env                  # then set JWT_ACCESS_SECRET at least
 docker compose up -d mongo redis mailpit
-npm run seed                          # optional: demo users and posts
+npm run seed                          # optional: demo community (see "Demo data")
 npm run dev                           # API on :3000, web app on :5173
 ```
 
-Open http://localhost:5173. With the seed data, sign in as `admin@klyro.dev`, `maya@klyro.dev` (moderator) or `sam@klyro.dev`; the password is `password123` for all of them. Emails (verification, password reset, notifications) land in Mailpit at http://localhost:8025.
+Open http://localhost:5173. Emails (verification, password reset, notifications) land in the Mailpit inbox at http://localhost:8025, not real inboxes.
+
+| Local URL | What |
+|---|---|
+| http://localhost:5173 | The app |
+| http://localhost:3000/api/docs | API docs (Swagger) |
+| http://localhost:8025 | Mailpit inbox |
 
 > If a port is taken on your machine, override it: `REDIS_PORT=6380 docker compose up -d mongo redis mailpit`, and set `REDIS_URL=redis://127.0.0.1:6380` in `.env`.
 
@@ -184,6 +193,29 @@ Open http://localhost:5173. With the seed data, sign in as `admin@klyro.dev`, `m
 ```bash
 docker compose --profile app up --build
 ```
+
+## Demo data
+
+`npm run seed` fills an **empty local database** with a demo community, so the feeds, trending, notifications and analytics look like a real, active platform.
+
+| Account | Role | Password |
+|---|---|---|
+| `admin@klyro.dev` | Admin: Moderation, users, analytics | `password123` |
+| `maya@klyro.dev` | Moderator | `password123` |
+| `sam@klyro.dev` | Regular member with a busy feed and notifications | `password123` |
+
+The other 27 members use the same pattern: `<username>@klyro.dev` / `password123`, for example `karthik_s@klyro.dev`.
+
+**What's in it**
+- **30 fictional members** from Chennai, Hyderabad, Kochi, Mumbai, Lucknow, Kolkata, Madurai and Jaipur to Toronto, Los Angeles, Madrid, Tokyo, Lagos and Singapore, each with a bio and interests.
+- **48 posts**: opinion pieces, reviews, debates and Quora-style questions. Topics span Bollywood, Tollywood, Kollywood, Mollywood, Hollywood and world cinema, music, cricket, tech and AI, careers, startups, food, finance, travel, books, fitness and education.
+- **75 threaded comments** with replies and @mentions, plus about 350 reactions, 180 follows, bookmarks and notifications, spread over six weeks.
+
+Every member is made up. Real actors, musicians and cricketers appear only as the subject of fan and critic discussion about their public work (films, awards, songs, matches), never as account holders.
+
+**Two cautions**
+- `npm run seed` refuses to run on a database that already has users. `npm run seed -- --force` **deletes the whole local database first**, including any accounts you created yourself.
+- It refuses to run with `NODE_ENV=production`. Demo content is for local use and demos only, never the live site.
 
 ## Configuration
 
@@ -301,7 +333,7 @@ Existing `/post/<slug>` links keep working. The script is idempotent, so running
 │   │   ├── lib/               cache, queue, mailer, socket, pagination, sanitize, SEO, AI
 │   │   ├── jobs/              BullMQ job registration and schedules
 │   │   ├── docs/              OpenAPI generation
-│   │   └── scripts/           seed, v1 migration
+│   │   └── scripts/           seed (+ seed-community demo data), v1 migration
 │   └── tests/                 Jest + Supertest
 ├── client/                    React app (TypeScript)
 │   └── src/
@@ -311,7 +343,10 @@ Existing `/post/<slug>` links keep working. The script is idempotent, so running
 │       ├── store/             Redux: auth + UI only
 │       ├── lib/               API client, socket, session, formatting
 │       └── test/              Vitest + Testing Library
-├── docs/screenshots/
+├── docs/
+│   ├── PROGRESS.md            status, decisions and next steps
+│   └── screenshots/
+├── CLAUDE.md                  guide for AI coding assistants working on this repo
 ├── Dockerfile · docker-compose.yml · .env.example
 └── .github/workflows/ci.yml
 ```
