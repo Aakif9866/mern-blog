@@ -116,11 +116,11 @@ export async function suggestions(viewer: UserDoc | undefined, limit = 6) {
     { $sort: { score: -1 } },
     { $limit: limit },
   ]);
-  let users = await User.find({ _id: { $in: authors.map((a) => a._id) }, status: { $ne: "banned" } })
+  let users = await User.find({ _id: { $in: authors.map((a) => a._id) }, status: { $ne: "banned" }, isGuest: { $ne: true } })
     .select(`${PUBLIC_USER_FIELDS} followersCount`)
     .lean();
   if (users.length < limit) {
-    const more = await User.find({ _id: { $nin: [...exclude, ...users.map((u) => u._id)] }, status: "active", postsCount: { $gt: 0 } })
+    const more = await User.find({ _id: { $nin: [...exclude, ...users.map((u) => u._id)] }, status: "active", isGuest: { $ne: true }, postsCount: { $gt: 0 } })
       .sort({ followersCount: -1 })
       .limit(limit - users.length)
       .select(`${PUBLIC_USER_FIELDS} followersCount`)
@@ -138,11 +138,18 @@ export async function completeOnboarding(user: UserDoc, tags: string[], follows:
 
 export async function searchUsers(q: string, limit: number) {
   const rx = new RegExp(`^${escapeRegex(q.toLowerCase())}`, "i");
-  return User.find({ status: { $ne: "banned" }, $or: [{ username: rx }, { name: new RegExp(escapeRegex(q), "i") }] })
+  return User.find({ status: { $ne: "banned" }, isGuest: { $ne: true }, $or: [{ username: rx }, { name: new RegExp(escapeRegex(q), "i") }] })
     .sort({ followersCount: -1 })
     .limit(limit)
     .select(`${PUBLIC_USER_FIELDS} followersCount`)
     .lean();
+}
+
+/** Job: delete guest accounts past their expiry, with the same cleanup as a normal account deletion. */
+export async function cleanupExpiredGuests(): Promise<number> {
+  const expired = await User.find({ isGuest: true, guestExpiresAt: { $lte: new Date() } }).select("_id").limit(500).lean();
+  for (const g of expired) await deleteAccount(g._id).catch(() => undefined);
+  return expired.length;
 }
 
 /**

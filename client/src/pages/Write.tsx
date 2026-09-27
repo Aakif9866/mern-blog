@@ -13,7 +13,7 @@ import { RichEditor } from "@/components/editor/RichEditor";
 import { TagInput } from "@/components/editor/TagInput";
 import { uploadImage } from "@/components/editor/upload";
 import { PostContent } from "@/components/post/PostContent";
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Field, Input } from "@/components/ui/Input";
 import { PageSpinner, Spinner } from "@/components/ui/Spinner";
@@ -311,7 +311,7 @@ function Write({ sessionKey, initial }: { sessionKey: string; initial?: Post }) 
     }
   };
 
-  if (me && (!me.emailVerified || me.status !== "active")) {
+  if (me && ((!me.emailVerified && !me.isGuest) || me.status !== "active")) {
     return (
       <div className="mx-auto max-w-xl px-4 py-16">
         <EmptyState icon={<PenLine className="h-5 w-5" />} title={me.status !== "active" ? "Writing is paused on your account" : "Verify your email to start writing"}>
@@ -346,6 +346,10 @@ function Write({ sessionKey, initial }: { sessionKey: string; initial?: Post }) 
             <Button size="sm" variant="outline" onClick={() => unschedule.mutate()} loading={unschedule.isPending}>
               Unschedule
             </Button>
+          ) : me?.isGuest ? (
+            <ButtonLink to="/keep-account" size="sm">
+              Sign up to publish
+            </ButtonLink>
           ) : (
             <Button size="sm" onClick={() => setPublishOpen(true)} disabled={!draft.title.trim() || draft.content.length < 20}>
               Publish

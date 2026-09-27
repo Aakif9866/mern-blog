@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Toaster, toast } from "sonner";
-import { MailWarning, ShieldAlert } from "lucide-react";
+import { MailWarning, ShieldAlert, UserRound } from "lucide-react";
+import { Link } from "react-router";
+import { guestTimeLeft } from "@/lib/guest";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { MobileTabBar } from "./MobileTabBar";
@@ -13,7 +15,7 @@ import { useThemeSync } from "@/lib/theme";
 import { api, errorMessage } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 
-const NO_ONBOARDING = ["/onboarding", "/verify-email", "/settings", "/sign-in", "/sign-up", "/reset-password"];
+const NO_ONBOARDING = ["/onboarding", "/verify-email", "/settings", "/sign-in", "/sign-up", "/reset-password", "/keep-account"];
 
 function Banners() {
   const me = useMe();
@@ -28,14 +30,34 @@ function Banners() {
       </div>
     );
   }
+  if (me.isGuest) {
+    return (
+      <div className="border-b border-amber-300/60 bg-amber-50 text-amber-950 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-50">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-sm">
+          <UserRound className="h-4 w-4 shrink-0" />
+          <span className="min-w-0 flex-[1_1_16rem]">
+            You're exploring as a guest. This session and everything in it is deleted in {guestTimeLeft(me.guestExpiresAt)}.
+          </span>
+          <Link
+            to="/keep-account"
+            className="-my-0.5 rounded-md px-1.5 py-0.5 font-semibold text-amber-900 underline decoration-2 underline-offset-2 hover:bg-amber-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 dark:text-white dark:hover:bg-amber-900 dark:focus-visible:outline-amber-200"
+          >
+            Create an account to keep it
+          </Link>
+        </div>
+      </div>
+    );
+  }
   if (!me.emailVerified) {
     return (
       <div className="border-b border-brand-200/60 bg-brand-50 text-brand-900 dark:border-brand-900 dark:bg-brand-950/40 dark:text-brand-100">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-sm">
           <MailWarning className="h-4 w-4 shrink-0" />
-          <span className="min-w-0 flex-1">Verify your email ({me.email}) to start writing and commenting.</span>
+          <span className="min-w-0 flex-[1_1_16rem]">
+            Verify your email (<span className="font-medium [overflow-wrap:anywhere]">{me.email}</span>) to start writing and commenting.
+          </span>
           <button
-            className="font-semibold underline underline-offset-2"
+            className="-my-0.5 rounded-md px-1.5 py-0.5 font-semibold text-brand-700 underline decoration-2 underline-offset-2 hover:bg-brand-100 hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-white dark:hover:bg-brand-800 dark:hover:text-white dark:focus-visible:outline-brand-200"
             onClick={() =>
               api
                 .post("/auth/resend-verification")
@@ -61,7 +83,7 @@ export function AppShell() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (me && me.emailVerified && !me.onboarded && !NO_ONBOARDING.some((p) => pathname.startsWith(p))) navigate("/onboarding");
+    if (me && (me.emailVerified || me.isGuest) && !me.onboarded && !NO_ONBOARDING.some((p) => pathname.startsWith(p))) navigate("/onboarding");
   }, [me, pathname, navigate]);
 
   useEffect(() => {

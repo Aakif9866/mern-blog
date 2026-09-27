@@ -10,6 +10,7 @@ import { LogoMark } from "@/components/ui/Logo";
 import { Field, Input } from "@/components/ui/Input";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { GoogleButton } from "@/components/GoogleButton";
+import { GuestButton } from "@/components/GuestButton";
 import { PageSpinner } from "@/components/ui/Spinner";
 
 function safeNext(next: string | null) {
@@ -79,6 +80,7 @@ export function SignIn() {
           Sign in
         </Button>
       </form>
+      <GuestButton className="mt-3 w-full" variant="ghost" />
     </AuthCard>
   );
 }
@@ -121,6 +123,7 @@ export function SignUp() {
         <Button type="submit" className="w-full" size="lg" loading={register.isPending} disabled={!form.username || !form.email || !form.password}>
           Create account
         </Button>
+        <GuestButton className="w-full" variant="ghost" />
         <p className="text-center text-xs text-ink-soft">
           By joining you agree to our <Link to="/guidelines" className="underline">community guidelines</Link>.
         </p>

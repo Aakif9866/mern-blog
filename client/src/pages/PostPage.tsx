@@ -198,7 +198,7 @@ export default function PostPage() {
                       Delete post
                     </MenuItem>
                   )}
-                  {!isAuthor && (
+                  {!isAuthor && !me.isGuest && (
                     <MenuItem onClick={() => (close(), setReporting(true))} icon={<Flag className="h-4 w-4" />}>
                       Report post
                     </MenuItem>

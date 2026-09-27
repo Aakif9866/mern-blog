@@ -22,6 +22,7 @@ const Bookmarks = lazy(() => import("@/pages/Bookmarks"));
 const Notifications = lazy(() => import("@/pages/Notifications"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const SeriesPage = lazy(() => import("@/pages/SeriesPage"));
+const KeepAccount = lazy(() => import("@/pages/KeepAccount"));
 
 const load = (node: ReactNode) => <Suspense fallback={<PageSpinner />}>{node}</Suspense>;
 const auth = (node: ReactNode, role?: "moderator" | "admin") => <RequireAuth role={role}>{load(node)}</RequireAuth>;
@@ -65,6 +66,7 @@ export const routes = [
       { path: "settings", element: auth(<Settings />) },
       { path: "settings/notifications", element: <Navigate to="/settings?tab=notifications" replace /> },
       { path: "onboarding", element: auth(<Onboarding />) },
+      { path: "keep-account", element: auth(<KeepAccount />) },
       { path: "mod", element: auth(<Moderation />, "moderator") },
       // v1 URLs
       { path: "projects", element: <Navigate to="/" replace /> },

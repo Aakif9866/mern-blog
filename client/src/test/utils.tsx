@@ -28,6 +28,8 @@ export const me: Me = {
   postsCount: 0,
   emailPrefs: { comments: true, mentions: true, follows: false, reactions: false, digest: true },
   googleLinked: false,
+  isGuest: false,
+  guestExpiresAt: null,
   createdAt: "2025-01-01T00:00:00Z",
 };
 

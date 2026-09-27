@@ -2,7 +2,7 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import { aiLimiter, authLimiter, writeLimiter } from "../middleware/security";
 import { imageUpload } from "../middleware/upload";
-import { requireActiveUser } from "../middleware/auth";
+import { requireActiveUser, requireMember } from "../middleware/auth";
 import { documentedRouter } from "../docs/registry";
 import * as v from "../validators";
 import * as auth from "../controllers/auth.controller";
@@ -24,6 +24,8 @@ a.get("/config", { summary: "Public client configuration (Google client id, AI a
 a.post("/register", { summary: "Create an account and sign in", body: v.registerBody, before: [authLimiter] }, auth.register);
 a.post("/login", { summary: "Sign in with email or username", body: v.loginBody, before: [authLimiter] }, auth.login);
 a.post("/google", { summary: "Sign in with a Google ID token", body: v.googleBody, before: [authLimiter] }, auth.google);
+a.post("/guest", { summary: "Start a temporary guest session (deleted after 24 hours unless upgraded)", before: [authLimiter] }, auth.guest);
+a.post("/guest/upgrade", { summary: "Turn the current guest account into a full account, keeping its activity", access: "user", body: v.registerBody, before: [authLimiter] }, auth.upgradeGuest);
 a.post("/refresh", { summary: "Rotate the refresh token and issue a new access token" }, auth.refresh);
 a.post("/logout", { summary: "Sign out of this device" }, auth.logout);
 a.post("/logout-all", { summary: "Sign out of every device", access: "user" }, auth.logoutAll);
@@ -35,14 +37,14 @@ a.post("/verify-email", { summary: "Confirm an email address with the emailed to
 a.post("/resend-verification", { summary: "Send the verification email again", access: "user", before: [authLimiter] }, auth.resendVerification);
 a.post("/forgot-password", { summary: "Email a password reset link", body: v.emailBody, before: [authLimiter] }, auth.forgotPassword);
 a.post("/reset-password", { summary: "Set a new password with the emailed token", body: v.resetBody, before: [authLimiter] }, auth.resetPassword);
-a.post("/change-password", { summary: "Change password", access: "user", body: v.changePasswordBody, before: [authLimiter] }, auth.changePassword);
+a.post("/change-password", { summary: "Change password", access: "user", body: v.changePasswordBody, before: [authLimiter, requireMember] }, auth.changePassword);
 api.use("/auth", a.router);
 
 // ---- Users ----
 const u = documentedRouter("/users", "Users");
 u.get("/suggestions", { summary: "Writers to follow" }, users.suggestions);
 u.patch("/me", { summary: "Update profile and email preferences", access: "user", body: v.updateMeBody }, users.updateMe);
-u.post("/me/avatar", { summary: "Upload a profile picture", access: "user", upload: true, before: [writeLimiter, imageUpload] }, users.uploadAvatar);
+u.post("/me/avatar", { summary: "Upload a profile picture", access: "user", upload: true, before: [requireMember, writeLimiter, imageUpload] }, users.uploadAvatar);
 u.delete("/me", { summary: "Delete my account", access: "user", body: v.deleteMeBody }, users.deleteMe);
 u.post("/me/onboarding", { summary: "Save interests and follows from onboarding", access: "user", body: v.onboardingBody }, users.onboarding);
 u.get("/:username", { summary: "Public profile", params: v.usernameParam }, users.profile);
@@ -59,14 +61,14 @@ const p = documentedRouter("/posts", "Posts");
 p.get("/", { summary: "Feed: latest, trending or following", query: v.feedQuery }, posts.feed);
 p.get("/mine", { summary: "My drafts, scheduled and published posts", access: "user", query: v.myPostsQuery }, posts.mine);
 p.post("/", { summary: "Create a draft", access: "writer", body: v.postBody }, posts.create);
-p.post("/images", { summary: "Upload an image for a post", access: "writer", upload: true, before: [imageUpload] }, posts.uploadImage);
-p.post("/ai/suggest-tags", { summary: "AI tag suggestions for a draft", access: "writer", body: v.aiTextBody, before: [aiLimiter] }, posts.suggestTags);
-p.post("/ai/summarize", { summary: "AI TL;DR preview for a draft", access: "writer", body: v.aiTextBody, before: [aiLimiter] }, posts.summarize);
+p.post("/images", { summary: "Upload an image for a post", access: "member", upload: true, before: [imageUpload] }, posts.uploadImage);
+p.post("/ai/suggest-tags", { summary: "AI tag suggestions for a draft", access: "member", body: v.aiTextBody, before: [aiLimiter] }, posts.suggestTags);
+p.post("/ai/summarize", { summary: "AI TL;DR preview for a draft", access: "member", body: v.aiTextBody, before: [aiLimiter] }, posts.summarize);
 p.get("/slug/:slug", { summary: "Read a post by slug, with the viewer's reactions/bookmark state", params: v.slugParam }, posts.bySlug);
 p.get("/:id/edit", { summary: "Load a post for editing", access: "user", params: v.idParam }, posts.forEdit);
 // Autosave calls this every few seconds, so it checks for an active account but skips the write limiter.
 p.patch("/:id", { summary: "Update a post (autosave for drafts; edits to published posts are versioned)", access: "user", params: v.idParam, body: v.postBody, before: [requireActiveUser] }, posts.update);
-p.post("/:id/publish", { summary: "Publish now or schedule", access: "writer", params: v.idParam, body: v.publishBody }, posts.publish);
+p.post("/:id/publish", { summary: "Publish now or schedule", access: "member", params: v.idParam, body: v.publishBody }, posts.publish);
 p.post("/:id/unschedule", { summary: "Cancel a scheduled publish", access: "user", params: v.idParam }, posts.unschedule);
 p.post("/:id/unpublish", { summary: "Move a published post back to drafts", access: "user", params: v.idParam }, posts.unpublish);
 p.delete("/:id", { summary: "Delete a post (soft delete)", access: "user", params: v.idParam }, posts.remove);
@@ -90,8 +92,8 @@ api.use("/series", s.router);
 // ---- Comments ----
 const c = documentedRouter("/comments", "Comments");
 c.get("/post/:postId", { summary: "Comment threads for a post", params: v.postIdParam, query: v.pageQuery }, social.listComments);
-c.post("/", { summary: "Comment or reply (supports @mentions)", access: "writer", body: v.commentBody }, social.createComment);
-c.patch("/:id", { summary: "Edit my comment", access: "writer", params: v.idParam, body: v.commentEditBody }, social.editComment);
+c.post("/", { summary: "Comment or reply (supports @mentions)", access: "member", body: v.commentBody }, social.createComment);
+c.patch("/:id", { summary: "Edit my comment", access: "member", params: v.idParam, body: v.commentEditBody }, social.editComment);
 c.delete("/:id", { summary: "Delete a comment", access: "user", params: v.idParam }, social.deleteComment);
 c.post("/:id/like", { summary: "Toggle like on a comment", access: "user", params: v.idParam, before: [writeLimiter] }, social.likeComment);
 api.use("/comments", c.router);
@@ -129,7 +131,7 @@ api.use("/search", q.router);
 
 // ---- Reports & moderation ----
 const r = documentedRouter("/reports", "Moderation");
-r.post("/", { summary: "Report a post or comment", access: "writer", body: v.reportBody }, mod.report);
+r.post("/", { summary: "Report a post or comment", access: "member", body: v.reportBody }, mod.report);
 api.use("/reports", r.router);
 
 const m = documentedRouter("/mod", "Moderation");

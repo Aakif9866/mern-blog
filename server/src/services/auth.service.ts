@@ -50,17 +50,22 @@ export function serializeMe(user: UserDoc) {
     postsCount: user.postsCount,
     emailPrefs: user.emailPrefs,
     googleLinked: Boolean(user.googleId),
+    isGuest: user.isGuest,
+    guestExpiresAt: user.guestExpiresAt ?? null,
     createdAt: user.createdAt,
   };
 }
 
 async function issueSession(user: UserDoc, meta: ClientMeta, family: string = randomUUID()): Promise<IssuedTokens & { sessionId: string }> {
   const refreshToken = randomToken();
+  const normal = new Date(Date.now() + env.REFRESH_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000);
+  // A guest's session never outlives the guest account.
+  const expiresAt = user.isGuest && user.guestExpiresAt && user.guestExpiresAt < normal ? user.guestExpiresAt : normal;
   const session = await Session.create({
     user: user._id,
     tokenHash: hashToken(refreshToken),
     family,
-    expiresAt: new Date(Date.now() + env.REFRESH_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000),
+    expiresAt,
     userAgent: meta.userAgent.slice(0, 300),
     ip: meta.ip,
   });
@@ -177,6 +182,48 @@ export async function googleLogin(credential: string, meta: ClientMeta) {
   return { user, ...tokens };
 }
 
+export const GUEST_TTL_MS = 24 * 60 * 60 * 1000;
+
+/** "Continue as guest": a throwaway account that lives for 24 hours unless upgraded. */
+export async function createGuest(meta: ClientMeta) {
+  const id = randomToken(6).toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8).padEnd(8, "0");
+  const user = await User.create({
+    username: `guest_${id}`,
+    email: `guest_${id}@guest.klyro.invalid`,
+    name: "Guest",
+    isGuest: true,
+    guestExpiresAt: new Date(Date.now() + GUEST_TTL_MS),
+    emailPrefs: { comments: false, mentions: false, follows: false, reactions: false, digest: false },
+  });
+  const tokens = await issueSession(user, meta);
+  return { user, ...tokens };
+}
+
+/** Turns the current guest into a full account, keeping follows, reactions, bookmarks and drafts. */
+export async function upgradeGuest(user: UserDoc, input: { username: string; email: string; password: string; name?: string }) {
+  if (!user.isGuest) throw badRequest("This account is already a full account");
+  const [emailTaken, usernameTaken] = await Promise.all([
+    User.exists({ email: input.email.toLowerCase(), _id: { $ne: user._id } }),
+    User.exists({ username: input.username.toLowerCase(), _id: { $ne: user._id } }),
+  ]);
+  if (emailTaken) throw conflict("An account with that email already exists");
+  if (usernameTaken) throw conflict("That username is taken");
+
+  user.username = input.username;
+  user.email = input.email;
+  user.name = input.name || input.username;
+  user.password = await bcrypt.hash(input.password, BCRYPT_ROUNDS);
+  user.isGuest = false;
+  user.guestExpiresAt = null;
+  user.emailVerified = false;
+  user.emailPrefs = { comments: true, mentions: true, follows: false, reactions: false, digest: true };
+  await user.save();
+  // The guest session was capped at the guest expiry; extend it to a normal lifetime.
+  await Session.updateMany({ user: user._id, revokedAt: null }, { expiresAt: new Date(Date.now() + env.REFRESH_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000) });
+  await sendVerificationEmail(user);
+  return user;
+}
+
 /**
  * Rotates a refresh token. Presenting a token that was already rotated means
  * it was stolen or replayed, so the whole login family is revoked.
@@ -193,7 +240,8 @@ export async function refresh(refreshToken: string, meta: ClientMeta) {
   }
 
   const user = await User.findById(session.user);
-  if (!user || user.status === "banned") {
+  const expiredGuest = user?.isGuest && user.guestExpiresAt && user.guestExpiresAt <= new Date();
+  if (!user || user.status === "banned" || expiredGuest) {
     session.revokedAt = new Date();
     await session.save();
     throw unauthorized("Session expired");

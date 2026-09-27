@@ -1,10 +1,10 @@
 import { Router, type RequestHandler } from "express";
 import type { z } from "zod";
 import { validate } from "../middleware/validate";
-import { requireActiveUser, requireAuth, requireRole } from "../middleware/auth";
+import { requireActiveUser, requireAuth, requireMember, requireRole } from "../middleware/auth";
 import { writeLimiter } from "../middleware/security";
 
-export type Access = "public" | "user" | "writer" | "moderator" | "admin";
+export type Access = "public" | "user" | "writer" | "member" | "moderator" | "admin";
 type Method = "get" | "post" | "put" | "patch" | "delete";
 
 export interface RouteDoc {
@@ -26,6 +26,7 @@ const ACCESS: Record<Access, RequestHandler[]> = {
   public: [],
   user: [requireAuth],
   writer: [requireAuth, requireActiveUser, writeLimiter],
+  member: [requireAuth, requireActiveUser, requireMember, writeLimiter],
   moderator: [requireAuth, requireRole("moderator")],
   admin: [requireAuth, requireRole("admin")],
 };

@@ -37,6 +37,9 @@ export interface IUser {
   onboarded: boolean;
   emailPrefs: EmailPrefs;
   lastDigestAt?: Date | null;
+  /** Temporary "Continue as guest" account, deleted at guestExpiresAt unless upgraded. */
+  isGuest: boolean;
+  guestExpiresAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -73,12 +76,15 @@ const userSchema = new Schema<IUser>(
       digest: { type: Boolean, default: true },
     },
     lastDigestAt: { type: Date, default: null },
+    isGuest: { type: Boolean, default: false },
+    guestExpiresAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
 
 userSchema.index({ name: 1 });
 userSchema.index({ createdAt: -1 });
+userSchema.index({ isGuest: 1, guestExpiresAt: 1 });
 
 export type UserDoc = HydratedDocument<IUser>;
 export const User = model<IUser>("User", userSchema);

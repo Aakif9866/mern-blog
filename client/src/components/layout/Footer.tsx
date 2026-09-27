@@ -1,5 +1,8 @@
 import { Link } from "react-router";
+import { Mail } from "lucide-react";
 import { LogoMark } from "../ui/Logo";
+
+export const CONTACT_EMAIL = "klyroapp2026@gmail.com";
 
 export function Footer() {
   return (
@@ -11,6 +14,16 @@ export function Footer() {
             Klyro
           </div>
           <p className="mt-2 text-sm text-ink-soft">Where ideas come together. A community for people who write to think and share what they learn.</p>
+          <div className="mt-4">
+            <h2 className="text-sm font-semibold">Contact us</h2>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="mt-1 inline-flex items-center gap-1.5 rounded text-sm font-medium text-brand-700 underline-offset-2 hover:underline dark:text-brand-300"
+            >
+              <Mail className="h-4 w-4 shrink-0" />
+              <span className="[overflow-wrap:anywhere]">{CONTACT_EMAIL}</span>
+            </a>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-x-12 gap-y-2 text-sm sm:grid-cols-3">
           <Link to="/about" className="text-ink-soft hover:text-ink">About</Link>

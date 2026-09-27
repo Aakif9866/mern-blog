@@ -25,6 +25,15 @@ export async function google(req: Request, res: Response) {
   signedIn(res, await auth.googleLogin(body<{ credential: string }>(req).credential, clientMeta(req)));
 }
 
+export async function guest(req: Request, res: Response) {
+  signedIn(res, await auth.createGuest(clientMeta(req)), 201);
+}
+
+export async function upgradeGuest(req: Request, res: Response) {
+  const user = await auth.upgradeGuest(req.user!, body(req));
+  res.json({ user: auth.serializeMe(user) });
+}
+
 export async function refresh(req: Request, res: Response) {
   const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
   if (!token) throw unauthorized("Session expired");

@@ -13,6 +13,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { FollowButton } from "@/components/post/FollowButton";
 import { LogoMark } from "@/components/ui/Logo";
 import { displayName } from "@/lib/format";
+import { GuestButton } from "@/components/GuestButton";
 
 type FeedType = "following" | "latest" | "trending";
 
@@ -64,9 +65,7 @@ function Hero() {
             <ButtonLink to="/sign-up" size="lg">
               Start writing for free
             </ButtonLink>
-            <ButtonLink to="/?feed=trending" variant="outline" size="lg">
-              Explore trending
-            </ButtonLink>
+            <GuestButton />
           </div>
         </div>
         <HeroPreview />

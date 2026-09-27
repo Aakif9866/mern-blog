@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, NavLink, useNavigate } from "react-router";
-import { Bell, Bookmark, LayoutDashboard, LogOut, Moon, PenSquare, Search, Settings, Shield, Sun, User, Monitor } from "lucide-react";
+import { Bell, Bookmark, LayoutDashboard, LogOut, Moon, PenSquare, Search, Settings, Shield, Sun, User, UserPlus, Monitor } from "lucide-react";
 import clsx from "clsx";
 import { Logo } from "../ui/Logo";
 import { Avatar } from "../ui/Avatar";
@@ -83,9 +83,14 @@ function UserMenu() {
         <>
           <Link to={`/u/${me.username}`} onClick={close} className="block px-3.5 py-2.5 hover:bg-muted">
             <div className="truncate font-semibold">{displayName(me)}</div>
-            <div className="truncate text-sm text-ink-soft">@{me.username}</div>
+            <div className="truncate text-sm text-ink-soft">{me.isGuest ? "Guest session" : `@${me.username}`}</div>
           </Link>
           <MenuDivider />
+          {me.isGuest && (
+            <MenuLink to="/keep-account" onClick={close} icon={<UserPlus className="h-4 w-4" />}>
+              Create account
+            </MenuLink>
+          )}
           <MenuLink to="/dashboard" onClick={close} icon={<LayoutDashboard className="h-4 w-4" />}>
             My posts
           </MenuLink>
@@ -114,7 +119,7 @@ function UserMenu() {
               navigate("/");
             }}
           >
-            Sign out
+            {me.isGuest ? "End guest session" : "Sign out"}
           </MenuItem>
         </>
       )}

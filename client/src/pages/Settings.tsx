@@ -18,6 +18,7 @@ import { Card, Badge } from "@/components/ui/misc";
 import { Modal } from "@/components/ui/Modal";
 import { Spinner } from "@/components/ui/Spinner";
 import { timeAgo } from "@/lib/format";
+import { GuestNotice } from "@/components/GuestNotice";
 
 type Section = "profile" | "notifications" | "account";
 
@@ -229,6 +230,7 @@ function AccountSettings({ me }: { me: Me }) {
           {me.googleLinked && <Badge>Google linked</Badge>}
         </div>
       </Section>
+      {!me.isGuest && (
       <Section title="Password" description={me.googleLinked ? "Set a password to also sign in with email." : undefined}>
         <form
           className="grid gap-4 sm:max-w-md"
@@ -250,6 +252,7 @@ function AccountSettings({ me }: { me: Me }) {
           </div>
         </form>
       </Section>
+      )}
       <Section title="Where you're signed in">
         <ul className="divide-y divide-line">
           {sessions.data?.items.map((s) => {
@@ -311,6 +314,11 @@ export default function Settings() {
     <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
       <title>Settings · Klyro</title>
       <h1 className="text-3xl font-extrabold tracking-tight">Settings</h1>
+      {me.isGuest && (
+        <div className="mt-5">
+          <GuestNotice action="keep these settings" />
+        </div>
+      )}
       <Tabs
         className="mt-5"
         value={section}

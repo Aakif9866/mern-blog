@@ -28,6 +28,7 @@ Klyro started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild
 - [Upgrading from v1](#upgrading-from-v1)
 - [Project structure](#project-structure)
 - [Project timeline](#project-timeline)
+- [Contact](#contact)
 - [Roadmap](#roadmap)
 
 ---
@@ -60,6 +61,11 @@ Klyro started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild
 - Notification center with read/unread state
 - Real-time delivery over Socket.io for follows, reactions, comments, replies and mentions
 - Email notifications (per-type preferences) and a weekly digest, sent by background jobs
+
+**Guest mode**
+- "Continue as guest" starts a temporary account in one click: guests can follow people and topics, react, bookmark and try the editor with autosaving drafts
+- Publishing, commenting, reporting, uploads and AI features need a full account, which keeps spam out. Guest activity sends no notifications and guests don't appear in search.
+- Guests can upgrade in place and keep everything. Otherwise the account and its data are deleted after 24 hours by a background job.
 
 **Moderation**
 - Report posts and comments; moderators work through a queue and can dismiss, remove, suspend or ban
@@ -216,8 +222,8 @@ Run from the repository root:
 npm run lint && npm run typecheck && npm test
 ```
 
-- **API: 41 Jest + Supertest tests** against an in-memory MongoDB. They cover auth (refresh-token rotation and reuse detection, sign out everywhere, email verification, password reset, CSRF), posts (drafts, sanitization, scheduling, edit history, cursor pagination, views, search), social features (follows, reactions, bookmarks and collections, nested comments and mentions, notifications, account deletion) and moderation (queue, role hierarchy, suspension, analytics).
-- **UI: 13 Vitest + React Testing Library tests**: the API client's silent refresh, forms and validation errors, optimistic reactions, the tag input, and mention and link rendering.
+- **API: 47 Jest + Supertest tests** against an in-memory MongoDB. They cover auth (refresh-token rotation and reuse detection, sign out everywhere, email verification, password reset, CSRF), posts (drafts, sanitization, scheduling, edit history, cursor pagination, views, search), social features (follows, reactions, bookmarks and collections, nested comments and mentions, notifications, account deletion), guest mode (limits, upgrade, expiry cleanup) and moderation (queue, role hierarchy, suspension, analytics).
+- **UI: 16 Vitest + React Testing Library tests**: the API client's silent refresh, forms and validation errors, optimistic reactions, the tag input, mention and link rendering, and guest mode.
 - **CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs lint → typecheck → test → build, then checks that the Docker image builds.
 - Before release, v2 was also driven end to end in a real browser (Playwright): 20 user flows on phone and desktop viewports, from sign-up to password reset, with real-time notifications and email. A responsive audit loaded every page at 320, 360, 390, 768, 1024, 1280 and 1920 px, checking for horizontal overflow, tiny tap targets, unreadable text and console errors. Both passed on the production Docker build.
 
@@ -238,7 +244,12 @@ Conventions:
 - **Accounts**: bcrypt (12 rounds) with timing-safe login, email verification, and single-use hashed reset tokens that expire. Google sign-in verifies the ID token on the server; v1 trusted whatever email the browser sent.
 - **Input**: Zod validation on every endpoint; post HTML sanitized with an allow-list; uploads checked by magic bytes (not just the MIME type) and size-limited, then served with a restrictive CSP.
 - **HTTP**: Helmet (CSP, HSTS, frame and referrer policies), strict CORS, request size limits, a CSRF header check, and rate limits (general, auth, writes, AI) backed by Redis when available.
-- **Moderation**: role hierarchy enforced on the server (moderators can't act on moderators or admins; only admins ban or change roles); banned users lose their sessions immediately.
+- **Guest mode**
+- "Continue as guest" starts a temporary account in one click: guests can follow people and topics, react, bookmark and try the editor with autosaving drafts
+- Publishing, commenting, reporting, uploads and AI features need a full account, which keeps spam out. Guest activity sends no notifications and guests don't appear in search.
+- Guests can upgrade in place and keep everything. Otherwise the account and its data are deleted after 24 hours by a background job.
+
+**Moderation**: role hierarchy enforced on the server (moderators can't act on moderators or admins; only admins ban or change roles); banned users lose their sessions immediately.
 
 ## Deployment
 
@@ -313,6 +324,10 @@ Existing `/post/<slug>` links keep working. The script is idempotent, so running
 | v1 feature-complete and deployed to Render | 10 Apr 2024 |
 | Screenshots and first README | 27 Nov 2025 |
 | v2 (Klyro) rebuild | 27 Sep 2026 |
+
+## Contact
+
+Questions, feedback or reports: **[klyroapp2026@gmail.com](mailto:klyroapp2026@gmail.com)**
 
 ## Roadmap
 

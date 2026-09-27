@@ -52,6 +52,8 @@ const populateSpec = [
 /** Stores a notification, pushes it over Socket.io and emails it if the user opted in. */
 export async function notify(input: NotifyInput): Promise<void> {
   if (input.actor && String(input.actor) === String(input.recipient)) return;
+  // Guests are anonymous and short-lived, so their activity doesn't notify anyone.
+  if (input.actor && (await User.exists({ _id: input.actor, isGuest: true }))) return;
 
   // Collapse repeated reactions/follows from the same actor instead of stacking duplicates.
   if (input.type === "reaction" || input.type === "follow") {

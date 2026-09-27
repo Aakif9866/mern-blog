@@ -34,6 +34,8 @@ export interface Me extends PublicUser {
   postsCount: number;
   emailPrefs: EmailPrefs;
   googleLinked: boolean;
+  isGuest: boolean;
+  guestExpiresAt: string | null;
   createdAt: string;
 }
 

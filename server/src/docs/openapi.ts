@@ -26,7 +26,8 @@ function parameters(doc: RouteDoc) {
 const ACCESS_NOTE: Record<RouteDoc["access"], string> = {
   public: "",
   user: "Requires sign-in.",
-  writer: "Requires sign-in with a verified email; blocked while suspended.",
+  writer: "Requires sign-in with a verified email (guests allowed); blocked while suspended.",
+  member: "Requires a full account with a verified email (not a guest); blocked while suspended.",
   moderator: "Moderators and admins only.",
   admin: "Admins only.",
 };

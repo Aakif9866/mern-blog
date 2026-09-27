@@ -19,6 +19,7 @@ import { MentionTextarea } from "./MentionTextarea";
 import { CommentText } from "./CommentText";
 import { ReportDialog } from "../post/ReportDialog";
 import { Skeleton } from "../ui/Skeleton";
+import { GuestNotice } from "../GuestNotice";
 
 
 interface Node extends CommentItem {
@@ -142,7 +143,7 @@ function CommentView({ node, postId, depth }: { node: Node; postId: string; dept
                             Delete
                           </MenuItem>
                         )}
-                        {!isMine && (
+                        {!isMine && !me.isGuest && (
                           <MenuItem icon={<Flag className="h-4 w-4" />} onClick={() => (close(), setReporting(true))}>
                             Report
                           </MenuItem>
@@ -182,7 +183,7 @@ function CommentView({ node, postId, depth }: { node: Node; postId: string; dept
                 {node.likesCount > 0 && node.likesCount}
                 <span className="sr-only">Like</span>
               </button>
-              <button onClick={() => (me ? setReplying((r) => !r) : navigate("/sign-in"))} className="flex items-center gap-1 rounded-md px-2 py-1.5 text-ink-soft hover:bg-muted">
+              <button onClick={() => (!me ? navigate("/sign-in") : me.isGuest ? navigate("/keep-account") : setReplying((r) => !r))} className="flex items-center gap-1 rounded-md px-2 py-1.5 text-ink-soft hover:bg-muted">
                 <MessageSquareReply className="h-4 w-4" />
                 Reply
               </button>
@@ -249,7 +250,9 @@ export const CommentSection = forwardRef<HTMLElement, { postId: string; count: n
         Discussion <span className="text-ink-soft">({count})</span>
       </h2>
       <div className="mt-4">
-        {me ? (
+        {me?.isGuest ? (
+          <GuestNotice action="comment" />
+        ) : me ? (
           me.emailVerified && me.status === "active" ? (
             <div className="flex gap-3">
               <Avatar user={me} size="sm" className="hidden sm:inline-flex" />
