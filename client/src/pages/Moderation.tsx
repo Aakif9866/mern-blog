@@ -317,7 +317,7 @@ export default function Moderation() {
   const tab = (params.get("tab") as Tab) || "reports";
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 sm:py-10">
-      <title>Moderation · Klyro</title>
+      <title>Moderation · Aakif's Blog</title>
       <h1 className="text-3xl font-extrabold tracking-tight">Moderation</h1>
       <Tabs className="mt-5" value={tab} onChange={(v) => setParams(v === "reports" ? {} : { tab: v }, { replace: true })} tabs={[{ value: "reports", label: "Reports" }, { value: "users", label: "Users" }, { value: "analytics", label: "Analytics" }]} />
       <div className="mt-6">

@@ -35,7 +35,7 @@ export default function Notifications() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
-      <title>Notifications · Klyro</title>
+      <title>Notifications · Aakif's Blog</title>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-extrabold tracking-tight">Notifications</h1>
         <Button variant="outline" size="sm" onClick={() => mark.mutate(undefined)} disabled={!items.some((n) => !n.read)}>

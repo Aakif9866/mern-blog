@@ -1,5 +1,5 @@
 /**
- * Fetch wrapper for the Klyro API. Auth lives in httpOnly cookies, so nothing
+ * Fetch wrapper for the Aakif's Blog API. Auth lives in httpOnly cookies, so nothing
  * token-related is ever read or stored in JavaScript. On a 401 the client
  * silently rotates the refresh token once and retries.
  */

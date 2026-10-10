@@ -49,7 +49,7 @@ export default function Search() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-      <title>{q ? `“${q}” · Search · Klyro` : "Search · Klyro"}</title>
+      <title>{q ? `“${q}” · Search · Aakif's Blog` : "Search · Aakif's Blog"}</title>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -59,7 +59,7 @@ export default function Search() {
         role="search"
       >
         <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-soft" />
-        <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="Search Klyro" className="h-12 pl-10 text-base sm:h-12" aria-label="Search" enterKeyHint="search" />
+        <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="Search Aakif's Blog" className="h-12 pl-10 text-base sm:h-12" aria-label="Search" enterKeyHint="search" />
       </form>
       <div className="mt-5 flex flex-wrap items-end justify-between gap-3">
         <Tabs value={type} onChange={(v) => update({ type: v === "posts" ? "" : v })} tabs={[{ value: "posts", label: "Posts" }, { value: "users", label: "People" }, { value: "tags", label: "Tags" }]} className="flex-1" />

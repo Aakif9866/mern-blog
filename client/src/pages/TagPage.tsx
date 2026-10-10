@@ -34,7 +34,7 @@ export function TagPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-      <title>{`#${tag} · Klyro`}</title>
+      <title>{`#${tag} · Aakif's Blog`}</title>
       <section className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-5 sm:flex-row sm:items-center sm:p-7">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300">
           <Hash className="h-7 w-7" />
@@ -82,7 +82,7 @@ export function TagsIndex() {
   const { data, isLoading } = useQuery({ queryKey: keys.popularTags, queryFn: () => api.get<{ items: Tag[] }>("/tags/popular") });
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 sm:py-10">
-      <title>Tags · Klyro</title>
+      <title>Tags · Aakif's Blog</title>
       <h1 className="text-3xl font-extrabold tracking-tight">Topics</h1>
       <p className="mt-1 text-ink-soft">Follow topics to shape your home feed.</p>
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

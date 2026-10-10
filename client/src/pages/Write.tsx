@@ -323,7 +323,7 @@ function Write({ sessionKey, initial }: { sessionKey: string; initial?: Post }) 
 
   return (
     <div className="mx-auto max-w-7xl px-4">
-      <title>{draft.title ? `Editing “${draft.title}” · Klyro` : "Write · Klyro"}</title>
+      <title>{draft.title ? `Editing “${draft.title}” · Aakif's Blog` : "Write · Aakif's Blog"}</title>
       <div className="sticky top-14 z-20 -mx-4 flex items-center gap-2 border-b border-line bg-page/90 px-4 py-2.5 backdrop-blur sm:top-16">
         <button onClick={() => navigate(-1)} className="rounded-lg p-2 text-ink-soft hover:bg-muted" aria-label="Back">
           <ArrowLeft className="h-5 w-5" />

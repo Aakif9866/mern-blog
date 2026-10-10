@@ -89,7 +89,7 @@ export default function Dashboard() {
   const items = flatten(q.data);
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-      <title>My posts · Klyro</title>
+      <title>My posts · Aakif's Blog</title>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-extrabold tracking-tight">My posts</h1>
         <ButtonLink to="/write">New post</ButtonLink>

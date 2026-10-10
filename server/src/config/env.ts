@@ -36,7 +36,7 @@ const schema = z.object({
   SMTP_USER: optionalString,
   SMTP_PASS: optionalString,
   SMTP_SECURE: bool,
-  MAIL_FROM: z.string().default("Klyro <no-reply@klyro.dev>"),
+  MAIL_FROM: z.string().default("Aakif's Blog <no-reply@klyro.dev>"),
 
   GOOGLE_CLIENT_ID: optionalString,
 

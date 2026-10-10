@@ -65,7 +65,7 @@ function ProfileSettings({ me }: { me: Me }) {
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
-    <Section title="Profile" description="This is how others see you on Klyro.">
+    <Section title="Profile" description="This is how others see you on Aakif's Blog.">
       <div className="mb-6 flex flex-wrap items-center gap-4">
         <div className="relative">
           <Avatar user={me} size="xl" className="h-20 w-20" />
@@ -297,7 +297,7 @@ function AccountSettings({ me }: { me: Me }) {
           </>
         }
       >
-        <p className="mb-4 text-sm text-ink-soft">Everything you've written on Klyro will be removed.</p>
+        <p className="mb-4 text-sm text-ink-soft">Everything you've written on Aakif's Blog will be removed.</p>
         <Field label="Confirm with your password" hint={me.googleLinked ? "Google-only accounts can leave this empty." : undefined}>
           {(id) => <Input id={id} type="password" value={deletePw} onChange={(e) => setDeletePw(e.target.value)} autoComplete="current-password" />}
         </Field>
@@ -312,7 +312,7 @@ export default function Settings() {
   const section = (params.get("tab") as Section) || "profile";
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
-      <title>Settings · Klyro</title>
+      <title>Settings · Aakif's Blog</title>
       <h1 className="text-3xl font-extrabold tracking-tight">Settings</h1>
       {me.isGuest && (
         <div className="mt-5">

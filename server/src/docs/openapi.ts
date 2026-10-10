@@ -65,10 +65,10 @@ export function buildOpenApi() {
   return {
     openapi: "3.1.0",
     info: {
-      title: "Klyro API",
+      title: "Aakif's Blog API",
       version: "2.0.0",
       description:
-        "REST API for Klyro — where ideas come together.\n\nAuthentication uses httpOnly cookies set by `/api/auth/login`. " +
+        "REST API for Aakif's Blog — where ideas come together.\n\nAuthentication uses httpOnly cookies set by `/api/auth/login`. " +
         "State-changing requests must send the header `X-Requested-With: klyro` (CSRF protection). " +
         "List endpoints use cursor pagination: pass the `nextCursor` from one page as `cursor` to get the next.",
     },

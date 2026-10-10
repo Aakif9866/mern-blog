@@ -22,9 +22,9 @@ export function LogoMark({ className }: { className?: string }) {
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link to="/" className={clsx("flex items-center gap-2 font-bold tracking-tight", className)} aria-label="Klyro home">
+    <Link to="/" className={clsx("flex items-center gap-2 font-bold tracking-tight", className)} aria-label="Aakif's Blog home">
       <LogoMark />
-      <span className="text-xl">Klyro</span>
+      <span className="text-xl">Aakif's Blog</span>
     </Link>
   );
 }

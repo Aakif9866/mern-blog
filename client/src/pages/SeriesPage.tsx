@@ -14,7 +14,7 @@ export default function SeriesPage() {
   const author = data.author as PublicUser;
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
-      <title>{`${data.title} · Klyro`}</title>
+      <title>{`${data.title} · Aakif's Blog`}</title>
       <p className="text-sm font-medium uppercase tracking-wide text-brand-600 dark:text-brand-300">Series</p>
       <h1 className="mt-1 text-3xl font-extrabold tracking-tight [overflow-wrap:anywhere]">{data.title}</h1>
       {data.description && <p className="mt-2 text-ink-soft">{data.description}</p>}

@@ -56,7 +56,7 @@ export function createApp() {
     "/api/docs",
     helmet({ contentSecurityPolicy: { directives: { "script-src": ["'self'", "'unsafe-inline'"] } } }),
     swaggerUi.serve,
-    swaggerUi.setup(spec, { customSiteTitle: "Klyro API" })
+    swaggerUi.setup(spec, { customSiteTitle: "Aakif's Blog API" })
   );
 
   app.use("/api", apiLimiter, requireCsrfHeader, optionalAuth, api);

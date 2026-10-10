@@ -53,7 +53,7 @@ function Hero() {
       <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_28rem]">
         <div className="max-w-2xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-soft">
-            <LogoMark className="h-4 w-4" /> Klyro community
+            <LogoMark className="h-4 w-4" /> Aakif's Blog community
           </div>
           <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
             Where ideas <span className="bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">come together.</span>
@@ -179,7 +179,7 @@ export default function Home() {
 
   return (
     <>
-      <title>{me ? "Home · Klyro" : "Klyro — Where ideas come together."}</title>
+      <title>{me ? "Home · Aakif's Blog" : "Aakif's Blog — Where ideas come together."}</title>
       {status === "guest" && <Hero />}
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-6 sm:py-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="min-w-0">

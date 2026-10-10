@@ -1,14 +1,14 @@
 <p align="center">
-  <img src="client/public/favicon.svg" width="72" height="72" alt="Klyro logo" />
+  <img src="client/public/favicon.svg" width="72" height="72" alt="Aakif's Blog logo" />
 </p>
 
-<h1 align="center">Klyro</h1>
+<h1 align="center">Aakif's Blog</h1>
 <p align="center"><strong>Where ideas come together.</strong></p>
 <p align="center">A community blogging platform for developers and curious minds, built on MongoDB, Express, React and Node.js in TypeScript.</p>
 
-![Klyro home page](docs/screenshots/home-desktop.png)
+![Aakif's Blog home page](docs/screenshots/home-desktop.png)
 
-Klyro started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild into a production-quality community platform: anyone can write, readers follow people and topics, discussions are threaded, a moderation team keeps things healthy, and it works just as well on a phone as on a desktop.
+Aakif's Blog started in 2024 as my 2nd-year college MERN blog. **v2** is a full rebuild into a production-quality community platform: anyone can write, readers follow people and topics, discussions are threaded, a moderation team keeps things healthy, and it works just as well on a phone as on a desktop.
 
 > **Project status:** v2 lives on the [`v2` branch](https://github.com/Aakif9866/mern-blog/tree/v2) and is feature-complete and tested, but not deployed yet. The live site ([mern-blog-final.onrender.com](https://mern-blog-final.onrender.com)) still runs v1 from `main`, and `v1` is kept as a backup branch. What's done and what's next: [`docs/PROGRESS.md`](docs/PROGRESS.md).
 
@@ -285,7 +285,7 @@ Conventions:
 
 ## Deployment
 
-Klyro deploys as **one Node service** that serves the API, WebSocket and built web app together.
+Aakif's Blog deploys as **one Node service** that serves the API, WebSocket and built web app together.
 
 **Render / Railway / any Node host**
 - Build command: `npm run build`
@@ -358,11 +358,11 @@ Existing `/post/<slug>` links keep working. The script is idempotent, so running
 | Project started (first commit) | 4 Feb 2024 |
 | v1 feature-complete and deployed to Render | 10 Apr 2024 |
 | Screenshots and first README | 27 Nov 2025 |
-| v2 (Klyro) rebuild | 27 Sep 2026 |
+| v2 (Aakif's Blog) rebuild | 27 Sep 2026 |
 
 ## Contact
 
-Questions, feedback or reports: **[klyroapp2026@gmail.com](mailto:klyroapp2026@gmail.com)**
+Questions, feedback or reports: **[aakif9866@gmail.com](mailto:aakif9866@gmail.com)**
 
 ## Roadmap
 

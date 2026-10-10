@@ -119,7 +119,7 @@ export default function PostPage() {
   if (error || !data) {
     return (
       <div className="mx-auto max-w-xl px-4 py-16">
-        <title>Post not found · Klyro</title>
+        <title>Post not found · Aakif's Blog</title>
         <EmptyState title={error instanceof ApiError && error.status === 404 ? "This post doesn't exist" : "Couldn't load this post"} action={<ButtonLink to="/">Back to home</ButtonLink>}>
           It may have been deleted, or the link might be wrong.
         </EmptyState>
@@ -134,7 +134,7 @@ export default function PostPage() {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
-      <title>{`${post.title} · Klyro`}</title>
+      <title>{`${post.title} · Aakif's Blog`}</title>
       <meta name="description" content={post.tldr || post.excerpt} />
 
       {post.status !== "published" && (
@@ -266,7 +266,7 @@ export default function PostPage() {
           </>
         }
       >
-        <p className="text-sm text-ink-soft">The post will be removed from Klyro for everyone.</p>
+        <p className="text-sm text-ink-soft">The post will be removed from Aakif's Blog for everyone.</p>
       </Modal>
     </article>
   );

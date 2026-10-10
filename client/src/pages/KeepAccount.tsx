@@ -22,7 +22,7 @@ export default function KeepAccount() {
     mutationFn: () => api.post<{ user: Me }>("/auth/guest/upgrade", { ...form, name: form.name || undefined }),
     onSuccess: (r) => {
       dispatch(signedIn(r.user));
-      toast.success("Welcome to Klyro! Check your inbox to verify your email.");
+      toast.success("Welcome to Aakif's Blog! Check your inbox to verify your email.");
       navigate("/", { replace: true });
     },
   });
@@ -36,10 +36,10 @@ export default function KeepAccount() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-10">
-      <title>Create your account · Klyro</title>
+      <title>Create your account · Aakif's Blog</title>
       <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
         <LogoMark className="h-10 w-10" />
-        <h1 className="mt-5 text-2xl font-extrabold tracking-tight">Keep your Klyro account</h1>
+        <h1 className="mt-5 text-2xl font-extrabold tracking-tight">Keep your Aakif's Blog account</h1>
         <p className="mt-1.5 text-sm text-ink-soft">
           Your guest session ends in {guestTimeLeft(me?.guestExpiresAt)}. Create an account to keep it and to publish, comment and upload.
         </p>

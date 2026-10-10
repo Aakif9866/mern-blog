@@ -11,7 +11,7 @@ import Profile from "@/pages/Profile";
 import Search from "@/pages/Search";
 import { TagPage, TagsIndex } from "@/pages/TagPage";
 import { ForgotPassword, ResetPassword, SignIn, SignUp, VerifyEmail } from "@/pages/Auth";
-import { About, Guidelines, NotFound } from "@/pages/Static";
+import { About, Guidelines, NotFound, Privacy } from "@/pages/Static";
 
 // Heavy or signed-in-only screens load on demand.
 const Write = lazy(() => import("@/pages/Write"));
@@ -54,6 +54,7 @@ export const routes = [
       { path: "search", element: <Search /> },
       { path: "about", element: <About /> },
       { path: "guidelines", element: <Guidelines /> },
+      { path: "privacy", element: <Privacy /> },
       { path: "sign-in", element: <GuestOnly><SignIn /></GuestOnly> },
       { path: "sign-up", element: <GuestOnly><SignUp /></GuestOnly> },
       { path: "forgot-password", element: <ForgotPassword /> },

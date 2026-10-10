@@ -141,7 +141,7 @@ export function Navbar() {
           className="ml-2 hidden h-10 w-full max-w-sm items-center gap-2 rounded-lg border border-line bg-muted/60 px-3 text-sm text-ink-soft hover:border-ink-soft/40 md:flex"
         >
           <Search className="h-4 w-4" />
-          Search Klyro…
+          Search Aakif's Blog…
           <kbd className="ml-auto rounded border border-line px-1.5 text-[11px] font-sans">/</kbd>
         </button>
         <nav className="ml-auto flex items-center gap-1">
@@ -172,7 +172,7 @@ export function Navbar() {
                 </ButtonLink>
               </span>
               <ButtonLink to="/sign-up" size="sm">
-                Join Klyro
+                Join Aakif's Blog
               </ButtonLink>
             </>
           )}

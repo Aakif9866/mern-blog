@@ -20,7 +20,7 @@ function safeNext(next: string | null) {
 function AuthCard({ title, subtitle, children, footer }: { title: string; subtitle?: ReactNode; children: ReactNode; footer?: ReactNode }) {
   return (
     <div className="mx-auto flex min-h-[calc(100dvh-8rem)] max-w-md flex-col justify-center px-4 py-10">
-      <title>{`${title} · Klyro`}</title>
+      <title>{`${title} · Aakif's Blog`}</title>
       <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
         <LogoMark className="h-10 w-10" />
         <h1 className="mt-5 text-2xl font-extrabold tracking-tight">{title}</h1>
@@ -65,7 +65,7 @@ export function SignIn() {
     login.mutate();
   };
   return (
-    <AuthCard title="Welcome back" subtitle="Sign in to write, react and join discussions." footer={<>New to Klyro? <Link to={`/sign-up${next !== "/" ? `?next=${encodeURIComponent(next)}` : ""}`} className="font-semibold text-brand-600 dark:text-brand-300">Create an account</Link></>}>
+    <AuthCard title="Welcome back" subtitle="Sign in to write, react and join discussions." footer={<>New to Aakif's Blog? <Link to={`/sign-up${next !== "/" ? `?next=${encodeURIComponent(next)}` : ""}`} className="font-semibold text-brand-600 dark:text-brand-300">Create an account</Link></>}>
       <GoogleButton next={next} />
       <form onSubmit={submit} className="space-y-4" noValidate>
         <Field label="Email or username">{(id) => <Input id={id} value={identifier} onChange={(e) => setIdentifier(e.target.value)} autoComplete="username" autoCapitalize="none" required />}</Field>
@@ -101,7 +101,7 @@ export function SignUp() {
   const errs = fieldErrors(register.error);
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm((f) => ({ ...f, [k]: k === "username" ? e.target.value.toLowerCase() : e.target.value }));
   return (
-    <AuthCard title="Join Klyro" subtitle="Where ideas come together." footer={<>Already have an account? <Link to="/sign-in" className="font-semibold text-brand-600 dark:text-brand-300">Sign in</Link></>}>
+    <AuthCard title="Join Aakif's Blog" subtitle="Where ideas come together." footer={<>Already have an account? <Link to="/sign-in" className="font-semibold text-brand-600 dark:text-brand-300">Sign in</Link></>}>
       <GoogleButton next={next} />
       <form
         onSubmit={(e) => {

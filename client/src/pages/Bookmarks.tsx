@@ -52,7 +52,7 @@ export default function Bookmarks() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-      <title>Bookmarks · Klyro</title>
+      <title>Bookmarks · Aakif's Blog</title>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-extrabold tracking-tight">Bookmarks</h1>
         <Button variant="outline" size="sm" onClick={() => (setName(""), setEditing("new"))}>

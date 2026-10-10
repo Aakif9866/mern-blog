@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Mail } from "lucide-react";
 import { LogoMark } from "../ui/Logo";
 
-export const CONTACT_EMAIL = "klyroapp2026@gmail.com";
+export const CONTACT_EMAIL = "aakif9866@gmail.com";
 
 export function Footer() {
   return (
@@ -11,7 +11,7 @@ export function Footer() {
         <div className="max-w-xs">
           <div className="flex items-center gap-2 font-bold">
             <LogoMark className="h-7 w-7" />
-            Klyro
+            Aakif's Blog
           </div>
           <p className="mt-2 text-sm text-ink-soft">Where ideas come together. A community for people who write to think and share what they learn.</p>
           <div className="mt-4">
@@ -30,11 +30,12 @@ export function Footer() {
           <Link to="/tags" className="text-ink-soft hover:text-ink">Tags</Link>
           <Link to="/search" className="text-ink-soft hover:text-ink">Search</Link>
           <Link to="/guidelines" className="text-ink-soft hover:text-ink">Guidelines</Link>
+          <Link to="/privacy" className="text-ink-soft hover:text-ink">Privacy</Link>
           <a href="/api/docs" className="text-ink-soft hover:text-ink">API</a>
           <Link to="/write" className="text-ink-soft hover:text-ink">Start writing</Link>
         </div>
       </div>
-      <div className="border-t border-line py-4 text-center text-xs text-ink-soft">© {new Date().getFullYear()} Klyro. Where ideas come together.</div>
+      <div className="border-t border-line py-4 text-center text-xs text-ink-soft">© {new Date().getFullYear()} Aakif's Blog. Where ideas come together.</div>
     </footer>
   );
 }

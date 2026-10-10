@@ -1,6 +1,6 @@
-# Klyro: guide for AI assistants
+# Aakif's Blog: guide for AI assistants
 
-Klyro ("Where ideas come together") is a community blogging platform: an npm-workspaces monorepo with a TypeScript Express API (`server/`) and a React app (`client/`). Read `docs/PROGRESS.md` first for current status, decisions and next steps, and update it at the end of a work session.
+Aakif's Blog ("Where ideas come together") is a community blogging platform: an npm-workspaces monorepo with a TypeScript Express API (`server/`) and a React app (`client/`). Read `docs/PROGRESS.md` first for current status, decisions and next steps, and update it at the end of a work session.
 
 ## Rules for this repo
 

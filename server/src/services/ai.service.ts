@@ -21,7 +21,7 @@ export async function summarize(title: string, html: string): Promise<string> {
   if (text.length < 400) return "";
   const result = await askClaude({
     system:
-      "You write TL;DR summaries for posts on Klyro, a community blogging platform. Write 2-3 plain sentences (under 60 words) capturing the post's main point and takeaway, in a neutral voice. No preamble, no markdown.",
+      "You write TL;DR summaries for posts on Aakif's Blog, a community blogging platform. Write 2-3 plain sentences (under 60 words) capturing the post's main point and takeaway, in a neutral voice. No preamble, no markdown.",
     prompt: `Title: ${title}\n\n${text.slice(0, MAX_INPUT_CHARS)}`,
     schema: TldrSchema,
     maxTokens: 1500,
@@ -41,7 +41,7 @@ export async function suggestTags(title: string, html: string): Promise<string[]
   if (env.aiEnabled) {
     const result = await askClaude({
       system:
-        "You suggest tags for posts on Klyro, a community blogging platform. Tags are single lowercase words or joined words without spaces (e.g. javascript, webdev, machinelearning). Prefer tags from the existing list when they fit; invent new ones only when nothing fits. Return 3 to 5 tags, most relevant first.",
+        "You suggest tags for posts on Aakif's Blog, a community blogging platform. Tags are single lowercase words or joined words without spaces (e.g. javascript, webdev, machinelearning). Prefer tags from the existing list when they fit; invent new ones only when nothing fits. Return 3 to 5 tags, most relevant first.",
       prompt: `Existing tags: ${known.join(", ") || "(none yet)"}\n\nPost:\n${text.slice(0, MAX_INPUT_CHARS)}`,
       schema: TagsSchema,
       maxTokens: 1000,

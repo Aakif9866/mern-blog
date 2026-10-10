@@ -20,7 +20,7 @@ async function main() {
   initSocket(server);
   await startScheduledJobs();
 
-  server.listen(env.PORT, () => logger.info(`Klyro API listening on http://localhost:${env.PORT}`));
+  server.listen(env.PORT, () => logger.info(`Aakif's Blog API listening on http://localhost:${env.PORT}`));
 
   const shutdown = async (signal: string) => {
     logger.info({ signal }, "Shutting down");

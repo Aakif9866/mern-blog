@@ -40,7 +40,7 @@ export default function Onboarding() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:py-14">
-      <title>Welcome · Klyro</title>
+      <title>Welcome · Aakif's Blog</title>
       <p className="text-sm font-semibold text-brand-600 dark:text-brand-300">Step {step} of 2</p>
       {step === 1 ? (
         <>

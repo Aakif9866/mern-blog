@@ -39,7 +39,7 @@ function headline(type: NotificationType, actor: string, reaction?: string): str
     case "mention":
       return `${actor} mentioned you`;
     default:
-      return "Update from the Klyro moderation team";
+      return "Update from the Aakif's Blog moderation team";
   }
 }
 
@@ -80,7 +80,7 @@ export async function notify(input: NotifyInput): Promise<void> {
   const post = doc?.post as unknown as { title?: string; slug?: string } | null;
   const actorName = actor?.name || actor?.username || "Someone";
   const title = headline(input.type, actorName, input.reaction);
-  const detail = input.message ?? (post?.title ? `On “${post.title}”` : "Open Klyro to see more.");
+  const detail = input.message ?? (post?.title ? `On “${post.title}”` : "Open Aakif's Blog to see more.");
   const path = post?.slug ? `/post/${post.slug}` : input.type === "follow" && actor?.username ? `/u/${actor.username}` : "/notifications";
   await enqueue("email", notificationMail(recipient.email, title, detail, path));
 }

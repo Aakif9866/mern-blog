@@ -87,7 +87,7 @@ export default function Profile() {
   if (error || !profile) {
     return (
       <div className="mx-auto max-w-xl px-4 py-16">
-        <title>User not found · Klyro</title>
+        <title>User not found · Aakif's Blog</title>
         <EmptyState title={error instanceof ApiError && error.status === 404 ? "This user doesn't exist" : "Couldn't load this profile"} action={<ButtonLink to="/">Back to home</ButtonLink>} />
       </div>
     );
@@ -96,8 +96,8 @@ export default function Profile() {
   const list = flatten(posts.data);
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-      <title>{`${displayName(profile)} (@${profile.username}) · Klyro`}</title>
-      <meta name="description" content={profile.bio || `Posts by ${displayName(profile)} on Klyro`} />
+      <title>{`${displayName(profile)} (@${profile.username}) · Aakif's Blog`}</title>
+      <meta name="description" content={profile.bio || `Posts by ${displayName(profile)} on Aakif's Blog`} />
       <section className="rounded-2xl border border-line bg-surface p-5 sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
           <Avatar user={profile} size="xl" className="h-20 w-20 text-2xl sm:h-24 sm:w-24" />

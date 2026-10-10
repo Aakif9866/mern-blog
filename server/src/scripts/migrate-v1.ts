@@ -1,5 +1,5 @@
 /**
- * Migrates a v1 MERN-blog database to the Klyro v2 schema, in place.
+ * Migrates a v1 MERN-blog database to the Aakif's Blog v2 schema, in place.
  *
  *   npm run migrate:v1                  # dry run: prints what would change
  *   npm run migrate:v1 -- --apply       # writes the changes

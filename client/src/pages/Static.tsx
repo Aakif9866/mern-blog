@@ -1,6 +1,7 @@
 import { Compass, HeartHandshake, PenLine, Shield, Sparkles, Users } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { LogoMark } from "@/components/ui/Logo";
+import { CONTACT_EMAIL } from "@/components/layout/Footer";
 
 export function About() {
   const points = [
@@ -9,15 +10,15 @@ export function About() {
     { icon: Compass, title: "Find what matters", text: "Following, Latest and Trending feeds, full-text search, topic pages and related posts." },
     { icon: Sparkles, title: "Helpful AI, not noisy AI", text: "Short TL;DR summaries and tag suggestions help readers and writers, and stay out of the way." },
     { icon: Shield, title: "Safe by default", text: "Community reporting, a moderation team, and security practices like httpOnly sessions and sanitized content." },
-    { icon: HeartHandshake, title: "Open community", text: "Klyro is for developers, students and curious minds. Everyone starts as a reader and everyone can write." },
+    { icon: HeartHandshake, title: "Open community", text: "Aakif's Blog is for developers, students and curious minds. Everyone starts as a reader and everyone can write." },
   ];
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-16">
-      <title>About · Klyro</title>
+      <title>About · Aakif's Blog</title>
       <LogoMark className="h-12 w-12" />
       <h1 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl">Where ideas come together.</h1>
       <p className="mt-4 max-w-2xl text-lg text-ink-soft">
-        Klyro is a community blogging platform. It's a place to write down what you're learning and building, and to meet people who care about the same things.
+        Aakif's Blog is a community blogging platform. It's a place to write down what you're learning and building, and to meet people who care about the same things.
       </p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
         {points.map((p) => (
@@ -29,7 +30,7 @@ export function About() {
         ))}
       </div>
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-        <ButtonLink to="/sign-up" size="lg">Join Klyro</ButtonLink>
+        <ButtonLink to="/sign-up" size="lg">Join Aakif's Blog</ButtonLink>
         <ButtonLink to="/guidelines" variant="outline" size="lg">Community guidelines</ButtonLink>
       </div>
     </div>
@@ -47,9 +48,9 @@ export function Guidelines() {
   ];
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:py-16">
-      <title>Community guidelines · Klyro</title>
+      <title>Community guidelines · Aakif's Blog</title>
       <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Community guidelines</h1>
-      <p className="mt-3 text-ink-soft">Klyro works because people treat each other well. These guidelines apply to posts, comments and profiles.</p>
+      <p className="mt-3 text-ink-soft">Aakif's Blog works because people treat each other well. These guidelines apply to posts, comments and profiles.</p>
       <ol className="mt-8 space-y-4">
         {rules.map(([title, text], i) => (
           <li key={title} className="flex gap-4 rounded-xl border border-line bg-surface p-4">
@@ -68,10 +69,37 @@ export function Guidelines() {
   );
 }
 
+export function Privacy() {
+  const sections: [string, string][] = [
+    ["What's collected", "Your username, email, display name, bio, avatar, website and location (whatever you fill in), plus the posts, comments and reactions you create. Passwords are stored hashed, never in plain text."],
+    ["Cookies", "Two httpOnly session cookies (access and refresh tokens) keep you signed in. They aren't used for tracking or ads, and no third-party analytics or ad cookies run on this site."],
+    ["Guest accounts", "\"Continue as guest\" creates a temporary account that's deleted automatically after 24 hours unless you create a real account."],
+    ["Optional third parties", "If enabled, \"Continue with Google\" uses Google's sign-in; AI summaries and tag suggestions use Anthropic's API; related-post search may use Voyage AI embeddings. These only run when the relevant feature is used and the site owner has configured a key — none are required to use the site."],
+    ["Email", "Used for sign-in, verification, password resets, and (if you opt in under Settings) notification digests. Not sold or shared."],
+    ["Deleting your account", "Settings → delete account removes your account and everything you've posted. This can't be undone."],
+    ["Contact", `Questions about any of this: ${CONTACT_EMAIL}.`],
+  ];
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:py-16">
+      <title>Privacy · Aakif's Blog</title>
+      <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Privacy</h1>
+      <p className="mt-3 text-ink-soft">Aakif's Blog is a personal project, not a company — here's plainly what's stored and why.</p>
+      <div className="mt-8 space-y-6">
+        {sections.map(([title, text]) => (
+          <div key={title}>
+            <h2 className="font-semibold">{title}</h2>
+            <p className="mt-1 text-sm text-ink-soft">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function NotFound() {
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-20 text-center">
-      <title>Page not found · Klyro</title>
+      <title>Page not found · Aakif's Blog</title>
       <p className="text-6xl font-extrabold text-brand-600">404</p>
       <h1 className="mt-4 text-2xl font-bold">This page doesn't exist</h1>
       <p className="mt-2 text-ink-soft">The link may be broken, or the page may have been removed.</p>

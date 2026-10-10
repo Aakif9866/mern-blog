@@ -5,9 +5,9 @@ import { Tag } from "../models/Tag";
 import { env } from "../config/env";
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-const SITE = "Klyro";
+const SITE = "Aakif's Blog";
 const TAGLINE = "Where ideas come together.";
-const DEFAULT_DESC = "Klyro is a community blogging platform for developers and curious minds. Write, share and discover ideas.";
+const DEFAULT_DESC = "Aakif's Blog is a community blogging platform for developers and curious minds. Write, share and discover ideas.";
 
 interface Meta {
   title: string;

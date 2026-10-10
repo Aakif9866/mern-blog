@@ -2,7 +2,7 @@
   "name": "klyro",
   "version": "2.0.0",
   "private": true,
-  "description": "Klyro — where ideas come together. A community blogging platform.",
+  "description": "Aakif's Blog — where ideas come together. A community blogging platform.",
   "license": "ISC",
   "engines": {
     "node": ">=20.19"
